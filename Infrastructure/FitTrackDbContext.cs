@@ -1,3 +1,4 @@
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,5 +24,34 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
         
         builder.Entity<User>()
             .Property(u => u.LastName).HasMaxLength(256);
+        
+        builder.Entity<IdentityRole<Guid>>()
+            .HasData(new List<IdentityRole<Guid>>
+            {
+                new IdentityRole<Guid>
+                {
+                    Id = IdentityRoleConstants.AdminRoleGuid,
+                    Name = IdentityRoleConstants.Admin,
+                    NormalizedName = IdentityRoleConstants.Admin.ToUpper(),
+                },
+                new IdentityRole<Guid>
+                {
+                    Id = IdentityRoleConstants.UserRoleGuid,
+                    Name = IdentityRoleConstants.User,
+                    NormalizedName = IdentityRoleConstants.User.ToUpper(),
+                },
+                new IdentityRole<Guid>
+                {
+                    Id = IdentityRoleConstants.TrainerRoleGuid,
+                    Name = IdentityRoleConstants.Trainer,
+                    NormalizedName = IdentityRoleConstants.Trainer.ToUpper(),
+                },
+                new IdentityRole<Guid>
+                {
+                    Id = IdentityRoleConstants.OwnerRoleGuid,
+                    Name = IdentityRoleConstants.Owner,
+                    NormalizedName = IdentityRoleConstants.Owner.ToUpper(),
+                }
+            });
     }
 }

@@ -128,6 +128,32 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fdf5ee34-bfc9-4fa3-a888-e820800e6121"),
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("9ffc304f-1df2-4efe-af2f-726e1d7d1917"),
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = new Guid("2ec017dc-a27f-4277-bf37-90b5063b47cd"),
+                            Name = "Trainer",
+                            NormalizedName = "TRAINER"
+                        },
+                        new
+                        {
+                            Id = new Guid("f63cb887-a8f6-4465-8a49-e3274ce6af99"),
+                            Name = "Owner",
+                            NormalizedName = "OWNER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
