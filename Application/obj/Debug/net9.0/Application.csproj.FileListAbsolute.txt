@@ -1,0 +1,16 @@
+D:\4 course\diploma\FitTrack.API\Application\bin\Debug\net9.0\Application.deps.json
+D:\4 course\diploma\FitTrack.API\Application\bin\Debug\net9.0\Application.dll
+D:\4 course\diploma\FitTrack.API\Application\bin\Debug\net9.0\Application.pdb
+D:\4 course\diploma\FitTrack.API\Application\bin\Debug\net9.0\Domain.dll
+D:\4 course\diploma\FitTrack.API\Application\bin\Debug\net9.0\Domain.pdb
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.csproj.AssemblyReference.cache
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.AssemblyInfoInputs.cache
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.AssemblyInfo.cs
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.csproj.CoreCompileInputs.cache
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.sourcelink.json
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Applicat.44B5EDA2.Up2Date
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.dll
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\refint\Application.dll
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\Application.pdb
+D:\4 course\diploma\FitTrack.API\Application\obj\Debug\net9.0\ref\Application.dll
