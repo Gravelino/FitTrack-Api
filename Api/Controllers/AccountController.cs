@@ -77,9 +77,9 @@ public class AccountController: ControllerBase
 
             return Ok();
         }
-        catch (Google.Apis.Auth.InvalidJwtException)
+        catch (Google.Apis.Auth.InvalidJwtException ex)
         {
-            return BadRequest("Invalid Google token");
+            return BadRequest($"Invalid Google token: {ex.Message}");
         }
     }
 
