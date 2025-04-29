@@ -8,5 +8,5 @@ public class Owner
     public Guid UserId { get; set; }
     public User User { get; set; }
     
-    //public ICollection<Gym>? Gyms { get; set; }
+    public ICollection<Gym>? Gyms { get; set; }
 }

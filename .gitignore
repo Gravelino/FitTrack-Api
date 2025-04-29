@@ -120,6 +120,3 @@ Desktop.ini
 
 # Windows shortcuts
 *.lnk
-
-**/bin/
-**/obj/

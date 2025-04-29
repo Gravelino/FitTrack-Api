@@ -173,3 +173,9 @@ D:\4 course\diploma\FitTrack.API\Api\obj\Debug\net9.0\refint\Api.dll
 D:\4 course\diploma\FitTrack.API\Api\obj\Debug\net9.0\Api.pdb
 D:\4 course\diploma\FitTrack.API\Api\obj\Debug\net9.0\Api.genruntimeconfig.cache
 D:\4 course\diploma\FitTrack.API\Api\obj\Debug\net9.0\ref\Api.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\Google.Apis.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\Google.Apis.Auth.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\Google.Apis.Core.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\Newtonsoft.Json.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\System.Management.dll
+D:\4 course\diploma\FitTrack.API\Api\bin\Debug\net9.0\runtimes\win\lib\net7.0\System.Management.dll

@@ -27,9 +27,43 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("GymId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("UserId");
 
+                    b.HasIndex("GymId");
+
                     b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Gym", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<decimal?>("Balance")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Gyms");
                 });
 
             modelBuilder.Entity("Domain.Entities.Owner", b =>
@@ -48,10 +82,15 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("GymId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GymId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -83,6 +122,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<Guid?>("GymId")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("Height")
                         .HasColumnType("integer");
@@ -138,6 +180,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GymId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -309,13 +353,32 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Admin", b =>
                 {
+                    b.HasOne("Domain.Entities.Gym", "Gym")
+                        .WithMany("Admins")
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithOne("AdminProfile")
                         .HasForeignKey("Domain.Entities.Admin", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Gym");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Gym", b =>
+                {
+                    b.HasOne("Domain.Entities.Owner", "Owner")
+                        .WithMany("Gyms")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Domain.Entities.Owner", b =>
@@ -331,17 +394,29 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Trainer", b =>
                 {
+                    b.HasOne("Domain.Entities.Gym", "Gym")
+                        .WithMany("Trainers")
+                        .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.User", "User")
                         .WithOne("TrainerProfile")
                         .HasForeignKey("Domain.Entities.Trainer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Gym");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.HasOne("Domain.Entities.Gym", null)
+                        .WithMany("Users")
+                        .HasForeignKey("GymId");
+
                     b.HasOne("Domain.Entities.Trainer", "Trainer")
                         .WithMany("Customers")
                         .HasForeignKey("TrainerId")
@@ -399,6 +474,20 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Gym", b =>
+                {
+                    b.Navigation("Admins");
+
+                    b.Navigation("Trainers");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Owner", b =>
+                {
+                    b.Navigation("Gyms");
                 });
 
             modelBuilder.Entity("Domain.Entities.Trainer", b =>

@@ -1,11 +1,14 @@
 using System.Security.Claims;
 using Application.Abstracts;
+using Application.DTOs;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Requests;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
 
@@ -14,12 +17,15 @@ public class AccountService : IAccountService
     private readonly IAuthTokenProcessor _authTokenProcessor;
     private readonly UserManager<User> _userManager;
     private readonly IUserRepository _userRepository;
+    private readonly string _googleClientId;
 
-    public AccountService(IAuthTokenProcessor authTokenProcessor, UserManager<User> userManager, IUserRepository userRepository)
+    public AccountService(IAuthTokenProcessor authTokenProcessor, UserManager<User> userManager,
+        IUserRepository userRepository, IConfiguration config)
     {
         _authTokenProcessor = authTokenProcessor;
         _userManager = userManager;
         _userRepository = userRepository;
+        _googleClientId = config["Authentication:Google:ClientId"]!;
     }
 
     public async Task RegisterAsync(RegisterRequest registerRequest)
@@ -44,7 +50,7 @@ public class AccountService : IAccountService
         await _userManager.AddToRoleAsync(user, GetIdentityRoleName(registerRequest.Role));
     }
 
-    public async Task LoginAsync(LoginRequest loginRequest)
+    public async Task<User?> LoginAsync(LoginRequest loginRequest)
     {
         var user = await _userManager.FindByEmailAsync(loginRequest.Email);
         if (user is null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
@@ -52,20 +58,9 @@ public class AccountService : IAccountService
             throw new LoginFailedException(loginRequest.Email);
         }
         
-        var roles = await _userManager.GetRolesAsync(user);
-
-        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
-        var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
+        await WriteTokensAsync(user);
         
-        var refreshTokenExpirationDateInUtc = DateTime.UtcNow.AddDays(7);
-        
-        user.RefreshToken = refreshTokenValue;
-        user.RefreshTokenExpiresAtUtc = refreshTokenExpirationDateInUtc;
-        
-        await _userManager.UpdateAsync(user);
-        
-        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
-        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", user.RefreshToken, refreshTokenExpirationDateInUtc);
+        return user;
     }
 
     public async Task RefreshTokenAsync(string? refreshToken)
@@ -87,20 +82,7 @@ public class AccountService : IAccountService
             throw new RefreshTokenException("Refresh token is expired.");
         }
         
-        var roles = await _userManager.GetRolesAsync(user);
-        
-        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
-        var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
-        
-        var refreshTokenExpirationDateInUtc = expirationDateInUtc.AddDays(7);
-        
-        user.RefreshToken = refreshTokenValue;
-        user.RefreshTokenExpiresAtUtc = refreshTokenExpirationDateInUtc;
-        
-        await _userManager.UpdateAsync(user);
-        
-        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
-        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", user.RefreshToken, refreshTokenExpirationDateInUtc);
+        await WriteTokensAsync(user);
     }
 
     private string GetIdentityRoleName(Role role)
@@ -172,7 +154,22 @@ public class AccountService : IAccountService
                         loginResult.Errors.Select(e => e.Description))}");
             }
         }
-        
+
+        await WriteTokensAsync(user);
+    }
+
+    public async Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string idToken)
+    {
+        var settings = new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = new[] { _googleClientId }
+        };
+
+        return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+    }
+    
+    private async Task WriteTokensAsync(User user)
+    {
         var roles = await _userManager.GetRolesAsync(user);
         
         var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
@@ -186,6 +183,47 @@ public class AccountService : IAccountService
         await _userManager.UpdateAsync(user);
         
         _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
-        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", user.RefreshToken, refreshTokenExpirationDateInUtc);
+        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", user.RefreshToken,
+            refreshTokenExpirationDateInUtc);
+    }
+
+    public async Task<CurrentUserDto> GetCurrentUserAsync(ClaimsPrincipal user)
+    {
+        var email = user.FindFirstValue(ClaimTypes.Email);
+        if (string.IsNullOrEmpty(email))
+            throw new UnauthorizedAccessException();
+        
+        var entity = await _userManager.FindByEmailAsync(email);
+        if (entity is null)
+            throw new UnauthorizedAccessException();
+        
+        var roles = await _userManager.GetRolesAsync(entity);
+
+        return new CurrentUserDto
+        {
+            Id = entity.Id,
+            Email = entity.Email!,
+            FirstName = entity.FirstName!,
+            LastName = entity.LastName!,
+            PictureUrl = entity.PictureUrl,
+            Roles = roles
+        };
+    }
+
+    public async Task DeleteAsync(ClaimsPrincipal user)
+    {
+        var existingUser = await _userManager.GetUserAsync(user);
+        if (existingUser is null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        
+        var result = await _userManager.DeleteAsync(existingUser);
+
+        if (!result.Succeeded)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        
     }
 }

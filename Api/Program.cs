@@ -60,6 +60,11 @@ builder.Services.AddDbContext<FitTrackDbContext>(options =>
 builder.Services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -151,30 +156,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGet("/api/account/login/google", ([FromQuery] string returnUrl, LinkGenerator linkGenerator,
-    SignInManager<User> signInManager, HttpContext httpContext) =>
-{
-    var properties = signInManager.ConfigureExternalAuthenticationProperties("Google",
-        linkGenerator.GetPathByName(httpContext, "GoogleLoginCallback")
-        + $"?returnUrl={returnUrl}");
-    
-    return Results.Challenge(properties, ["Google"]);
-});
-
-app.MapGet("/api/account/login/google/callback", async ([FromQuery] string returnUrl,  HttpContext httpContext,
-    IAccountService accountService) =>
-{
-    var result = await httpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-   
-    if (!result.Succeeded)
-    {
-        return Results.Unauthorized();
-    }
-
-    await accountService.LoginWithGoogleAsync(result.Principal);
-
-    return Results.Redirect(returnUrl);
-}).WithName("GoogleLoginCallback");
 
 app.Run();
