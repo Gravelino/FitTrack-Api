@@ -34,7 +34,8 @@ builder.Services.AddCors(opt =>
         options.AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .AllowAnyOrigin();
+            .SetIsOriginAllowed(_ => true);  
+            //.AllowAnyOrigin();
         //.WithOrigins("http://localhost:3000");
     });
 });
@@ -118,14 +119,14 @@ await app.ApplyMigrationsAsync<FitTrackDbContext>();
 
 app.UseCors("CorsPolicy");
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
         options.WithTitle("FitTrack API");
     });
-}
+//}
 
 app.UseExceptionHandler(_ => { });
 

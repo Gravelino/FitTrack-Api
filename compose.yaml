@@ -1,20 +1,21 @@
 ﻿services:
-  api:
+  fittrack.api:
+    container_name: fittrack.api
     image: ${DOCKER_REGISTRY-}fittrack.api
     build:
       context: .
       dockerfile: Api/Dockerfile
     ports:
-      - 5000:8080
-      - 5001:8081
+      - 8080:8080
+      - 8081:8081
   
-  postgres:
+  fittrack.db:
     image: postgres:17
     container_name: fittrack.db
     environment:
-      - POSTGRES_DB=fittrack.db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=FitTrack
+      - POSTGRES_USER=fittrack_admin
+      - POSTGRES_PASSWORD=npg_7RGNfyx5kFeT
     volumes:
       - ./.containers/db:/var/lib/postgresql/data
     ports:
