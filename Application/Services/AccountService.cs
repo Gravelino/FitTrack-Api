@@ -162,7 +162,7 @@ public class AccountService : IAccountService
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings
         {
-            Audience = new[] { _googleClientId }
+            Audience = [_googleClientId]
         };
 
         return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
