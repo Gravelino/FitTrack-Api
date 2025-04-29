@@ -14,6 +14,9 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     }
     
     public DbSet<User> Users { get; set; }
+    public DbSet<Trainer> Trainers { get; set; }
+    public DbSet<Owner> Owners { get; set; }
+    public DbSet<Admin> Admins { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -53,5 +56,29 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                     NormalizedName = IdentityRoleConstants.Owner.ToUpper(),
                 }
             });
+        
+        builder.Entity<Trainer>()
+            .HasMany(t => t.Customers)
+            .WithOne(u => u.Trainer)
+            .HasForeignKey(u => u.TrainerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Trainer>()
+            .HasOne(t => t.User)
+            .WithOne(u => u.TrainerProfile)
+            .HasForeignKey<Trainer>(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Owner>()
+            .HasOne(o => o.User)
+            .WithOne(u => u.OwnerProfile)
+            .HasForeignKey<Owner>(o => o.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Admin>()
+            .HasOne(a => a.User)
+            .WithOne(u => u.AdminProfile)
+            .HasForeignKey<Admin>(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
