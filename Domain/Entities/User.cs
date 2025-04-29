@@ -6,6 +6,7 @@ public class User : IdentityUser<Guid>
 {
     public required string  FirstName { get; set; }
     public required string  LastName { get; set; }
+    public string? PictureUrl { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiresAtUtc { get; set; }
 

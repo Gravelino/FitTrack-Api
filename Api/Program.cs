@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Api.Handlers;
 using Application.Abstracts;
@@ -81,7 +82,22 @@ builder.Services.AddAuthentication(options =>
     
     options.ClientId = clientId;
     options.ClientSecret = clientSecret;
+    options.ClaimActions.MapJsonKey("picture", "picture", "url");
     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    
+    options.Events.OnCreatingTicket = context =>
+    {
+        var picture = context.User.GetProperty("picture").GetString();
+
+        if (!string.IsNullOrEmpty(picture))
+        {
+            ((ClaimsIdentity)context.Principal.Identity).AddClaim(
+                new Claim("picture", picture)
+            );
+        }
+
+        return Task.CompletedTask;
+    };
 }).AddJwtBearer(options =>
 {
     var jwtOptions = builder.Configuration.GetSection(JwtOptions.JwtOptionsKey)

@@ -137,6 +137,7 @@ public class AccountService : IAccountService
                 Email = email,
                 FirstName = claimsPrincipal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty,
                 LastName = claimsPrincipal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty,
+                PictureUrl = claimsPrincipal.FindFirstValue("picture") ?? string.Empty,
                 EmailConfirmed = true,
             };
             
@@ -155,14 +156,21 @@ public class AccountService : IAccountService
         var info = new UserLoginInfo("Google",
             claimsPrincipal.FindFirstValue(ClaimTypes.Email) ?? string.Empty,
             "Google");
-        
-        var loginResult = await _userManager.AddLoginAsync(user, info);
 
-        if (!loginResult.Succeeded)
+        var userLogins = await _userManager.GetLoginsAsync(user);
+        var hasGoogleLogin = userLogins.Any(x => x.LoginProvider == 
+                                                 info.LoginProvider && x.ProviderKey == info.ProviderKey);
+
+        if (!hasGoogleLogin)
         {
-            throw new ExternalLoginProviderException("Google",
-                $"Unable to login the user: {string.Join(", ",
-                    loginResult.Errors.Select(e => e.Description))}");
+            var loginResult = await _userManager.AddLoginAsync(user, info);
+
+            if (!loginResult.Succeeded)
+            {
+                throw new ExternalLoginProviderException("Google",
+                    $"Unable to login the user: {string.Join(", ",
+                        loginResult.Errors.Select(e => e.Description))}");
+            }
         }
         
         var roles = await _userManager.GetRolesAsync(user);
