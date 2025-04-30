@@ -6,11 +6,8 @@ namespace Infrastructure.Repositories;
 
 public class IndividualTrainingRepository : Repository<IndividualTraining>, IIndividualTrainingRepository
 {
-    private readonly FitTrackDbContext _context;
-
     public IndividualTrainingRepository(FitTrackDbContext context) : base(context)
     {
-        _context = context;
     }
 
     public async Task<IEnumerable<IndividualTraining>> GetIndividualTrainingsInfoByUserIdByPeriod(Guid userId,

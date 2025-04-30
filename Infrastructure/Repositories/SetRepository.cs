@@ -6,6 +6,7 @@ namespace Infrastructure.Repositories;
 
 public class SetRepository : Repository<Set>, ISetRepository
 {
+
     public SetRepository(FitTrackDbContext context) : base(context)
     {
     }
