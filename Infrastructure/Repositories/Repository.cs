@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class Repository<T> : IRepository<T> where T : class
+public class Repository<T> : IRepository<T> where T : class, IEntity
 {
     protected readonly FitTrackDbContext _context;
     protected readonly DbSet<T> _dbSet;
@@ -24,14 +24,19 @@ public class Repository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task AddAsync(T entity)
+    public async Task<Guid> AddAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
+        return entity.Id;
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task UpdateAsync(Guid id, T entity)
     {
+        if (entity.Id != id)
+        {
+            throw new ArgumentException("Ids do not match");
+        }
         _dbSet.Update(entity);
         await _context.SaveChangesAsync();
     }

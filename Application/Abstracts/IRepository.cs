@@ -1,10 +1,10 @@
 namespace Application.Abstracts;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> where T : class, IEntity
 {
     Task<IEnumerable<T>> GetAllAsync();
     Task<T?> GetByIdAsync(Guid id);
-    Task AddAsync(T entity);
-    Task UpdateAsync(T entity);
+    Task<Guid> AddAsync(T entity);
+    Task UpdateAsync(Guid id, T entity);
     Task DeleteAsync(Guid id);
 }
