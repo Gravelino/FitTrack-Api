@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Abstracts;
 
 namespace Domain.Entities;
 
-public class Gym
+public class Gym : IEntity
 {
     public  Guid Id { get; set; }
     public required Address Address { get; set; }

@@ -1,6 +1,8 @@
+using Application.Abstracts;
+
 namespace Domain.Entities;
 
-public class Set
+public class Set : IEntity
 {
     public Guid Id { get; set; }       
     public double Weight { get; set; }  

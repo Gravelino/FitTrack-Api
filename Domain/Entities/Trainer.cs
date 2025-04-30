@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Abstracts;
 
 namespace Domain.Entities;
 
-public class Trainer
+public class Trainer : IEntity
 {
     public Guid Id { get; set; }
     

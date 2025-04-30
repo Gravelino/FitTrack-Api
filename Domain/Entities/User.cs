@@ -1,8 +1,9 @@
+using Application.Abstracts;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities;
 
-public class User : IdentityUser<Guid>
+public class User : IdentityUser<Guid>, IEntity
 {
     public required string  FirstName { get; set; }
     public required string  LastName { get; set; }
