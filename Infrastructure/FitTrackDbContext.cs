@@ -81,5 +81,17 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
             .WithOne(u => u.AdminProfile)
             .HasForeignKey<Admin>(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<Gym>(entity =>
+        {
+            entity.OwnsOne(g => g.Address, address =>
+            {
+                address.Property(a => a.Country).HasMaxLength(100);
+                address.Property(a => a.City).HasMaxLength(100);
+                address.Property(a => a.Street).HasMaxLength(150).IsRequired();
+                address.Property(a => a.Building).HasMaxLength(10);
+                address.Property(a => a.ZipCode).HasMaxLength(20);
+            });
+        });
     }
 }
