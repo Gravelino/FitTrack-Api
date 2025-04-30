@@ -63,6 +63,42 @@ public class AccountService : IAccountService
         return user;
     }
 
+    public async Task<(string, string, User?)> LoginMobileAsync(LoginMobileRequest loginRequest)
+    {
+        var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+        
+        if (user is null)
+        {
+            var newUser = User.Create(loginRequest.Email, loginRequest.FirstName, loginRequest.LastName);
+            newUser.PictureUrl = loginRequest.ProfilePicture ?? string.Empty;
+            var result = await _userManager.CreateAsync(newUser);
+
+            if (!result.Succeeded)
+            {
+                throw new RegistrationFailedException(result.Errors.Select(e => e.Description));
+            }
+        
+            await _userManager.AddToRoleAsync(newUser, GetIdentityRoleName(loginRequest.Role));
+            
+            
+            user = newUser;
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
+        var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
+        
+        var refreshTokenExpirationDateInUtc = expirationDateInUtc.AddDays(7);
+        
+        user.RefreshToken = refreshTokenValue;
+        user.RefreshTokenExpiresAtUtc = refreshTokenExpirationDateInUtc;
+        
+        await _userManager.UpdateAsync(user);
+        
+        return (jwtToken, user.RefreshToken, user);
+    }
+    
     public async Task RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
@@ -224,6 +260,21 @@ public class AccountService : IAccountService
         {
             throw new UnauthorizedAccessException();
         }
+    }
+    
+    public async Task DeleteByEmail(DeleteByEmailRequest deleteByEmailRequest)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(deleteByEmailRequest.Email);
+        if (existingUser is null)
+        {
+            throw new UnauthorizedAccessException();
+        }
         
+        var result = await _userManager.DeleteAsync(existingUser);
+
+        if (!result.Succeeded)
+        {
+            throw new UnauthorizedAccessException();
+        }
     }
 }

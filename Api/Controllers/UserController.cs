@@ -1,5 +1,6 @@
 using Application.Abstracts;
 using Application.DTOs;
+using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ public class UserController : ControllerBase
         _adminService = adminService;
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = IdentityRoleConstants.Admin)]
     [HttpPost("create-trainer")]
     public async Task<IActionResult> CreateTrainerAsync([FromBody] CreateStaffDto dto)
     {
@@ -39,7 +40,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Owner")]
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
     [HttpPost("create-admin")]
     public async Task<IActionResult> CreateAdminAsync([FromBody] CreateStaffDto dto)
     {

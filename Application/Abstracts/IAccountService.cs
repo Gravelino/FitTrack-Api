@@ -15,4 +15,6 @@ public interface IAccountService
     Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string idToken);
     Task<CurrentUserDto> GetCurrentUserAsync(ClaimsPrincipal user);
     Task DeleteAsync(ClaimsPrincipal user);
+    Task<(string, string, User?)> LoginMobileAsync(LoginMobileRequest loginRequest);
+    Task DeleteByEmail(DeleteByEmailRequest deleteByEmailRequest);
 }

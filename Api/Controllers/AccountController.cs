@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Application.Abstracts;
 using Domain.Entities;
 using Domain.Requests;
+using Google.Apis.Auth.OAuth2.Requests;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,7 +96,35 @@ public class AccountController: ControllerBase
 
         return Ok(user);
     }
+    
+    [HttpPost("login-mobile")]
+    public async Task<IActionResult> LoginMobile([FromBody] LoginMobileRequest loginRequest)
+    {
+        var user = await _accountService.LoginMobileAsync(loginRequest);
 
+        if (user.Item3 is null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new{ User = user.Item3, AccessToken = user.Item1, RefreshToken = user.Item2 });
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        var refreshToken = Request.Cookies["REFRESH_TOKEN"];
+        await _accountService.RefreshTokenAsync(refreshToken);
+        return Ok();
+    }
+
+    [HttpPost("refresh-token/mobile")]
+    public async Task<IActionResult> RefreshTokenMobile([FromBody] string refreshToken)
+    {
+        await _accountService.RefreshTokenAsync(refreshToken);
+        return Ok();
+    }
+    
     [HttpGet("me")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetCurrentUser()
@@ -110,6 +139,15 @@ public class AccountController: ControllerBase
     {
         await _accountService.DeleteAsync(User);
         await _signInManager.SignOutAsync();
-        return Ok();
+        return NoContent();
+    }
+    
+    [HttpDelete("by-email")]
+    [Authorize]
+    public async Task<IActionResult> DeleteUserByEmail([FromBody] DeleteByEmailRequest deleteByEmailRequest)
+    {
+        await _accountService.DeleteByEmail(deleteByEmailRequest);
+        await _signInManager.SignOutAsync();
+        return NoContent();
     }
 }
