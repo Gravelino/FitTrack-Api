@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RefreshTokenRequest = Domain.Requests.RefreshTokenRequest;
 
 namespace Api.Controllers;
 
@@ -119,9 +120,9 @@ public class AccountController: ControllerBase
     }
 
     [HttpPost("refresh-token/mobile")]
-    public async Task<IActionResult> RefreshTokenMobile([FromBody] string refreshToken)
+    public async Task<IActionResult> RefreshTokenMobile([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-        await _accountService.RefreshTokenAsync(refreshToken);
+        await _accountService.RefreshTokenAsync(refreshTokenRequest.RefreshToken);
         return Ok();
     }
     
