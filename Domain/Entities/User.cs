@@ -19,8 +19,8 @@ public class User : IdentityUser<Guid>
     public Trainer? TrainerProfile { get; set; }
     public Admin? AdminProfile { get; set; }
     
-    //public ICollection<GroupTraining>? GroupTrainings { get; set; }
-    //public ICollection<IndividualTraining>? IndividualTrainings { get; set; }
+    public ICollection<GroupTraining>? GroupTrainings { get; set; }
+    public ICollection<IndividualTraining>? IndividualTrainings { get; set; }
 
     //public ICollection<Purchase>? Purchases { get; set; }
     //public ICollection<Meal>? Meals { get; set; }

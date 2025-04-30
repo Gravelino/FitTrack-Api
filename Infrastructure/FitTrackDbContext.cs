@@ -19,6 +19,12 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<Admin> Admins { get; set; }
     public DbSet<Gym> Gyms { get; set; }
     
+    public DbSet<Exercise> Exercises { get; set; }
+    public DbSet<Set> Sets { get; set; }
+    
+    public DbSet<IndividualTraining> IndividualTrainings { get; set; }
+    public DbSet<GroupTraining> GroupTrainings { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
