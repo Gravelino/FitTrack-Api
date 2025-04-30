@@ -122,8 +122,8 @@ public class AccountController: ControllerBase
     [HttpPost("refresh-token/mobile")]
     public async Task<IActionResult> RefreshTokenMobile([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-        await _accountService.RefreshTokenAsync(refreshTokenRequest.RefreshToken);
-        return Ok();
+        var tokens = await _accountService.RefreshTokenMobileAsync(refreshTokenRequest.RefreshToken);
+        return Ok(new { AccessToken = tokens.Item1, RefreshToken = tokens.Item2 });
     }
     
     [HttpGet("me")]

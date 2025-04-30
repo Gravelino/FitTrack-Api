@@ -120,6 +120,40 @@ public class AccountService : IAccountService
         
         await WriteTokensAsync(user);
     }
+    
+    public async Task<(string, string)> RefreshTokenMobileAsync(string? refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            throw new RefreshTokenException("Refresh token is missing.");
+        }
+        
+        var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
+
+        if (user is null)
+        {
+            throw new RefreshTokenException("Unable to retrieve user for refresh token.");
+        }
+
+        if (user.RefreshTokenExpiresAtUtc < DateTime.UtcNow)
+        {
+            throw new RefreshTokenException("Refresh token is expired.");
+        }
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
+        var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
+        
+        var refreshTokenExpirationDateInUtc = expirationDateInUtc.AddDays(7);
+        
+        user.RefreshToken = refreshTokenValue;
+        user.RefreshTokenExpiresAtUtc = refreshTokenExpirationDateInUtc;
+        
+        await _userManager.UpdateAsync(user);
+        
+        return (jwtToken, user.RefreshToken);
+    }
 
     private string GetIdentityRoleName(Role role)
     {

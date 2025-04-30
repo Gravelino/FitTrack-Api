@@ -11,6 +11,7 @@ public interface IAccountService
     Task RegisterAsync(RegisterRequest registerRequest);
     Task<User?> LoginAsync(LoginRequest loginRequest);
     Task RefreshTokenAsync(string? refreshToken);
+    Task<(string, string)> RefreshTokenMobileAsync(string? refreshToken);
     Task LoginWithGoogleAsync(ClaimsPrincipal? claimsPrincipal);
     Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string idToken);
     Task<CurrentUserDto> GetCurrentUserAsync(ClaimsPrincipal user);
