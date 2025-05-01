@@ -108,7 +108,7 @@ public class AccountController: ControllerBase
             return Unauthorized();
         }
 
-        return Ok(new{ User = user.Item3, AccessToken = user.Item1, RefreshToken = user.Item2 });
+        return Ok(new{ UserId = user.Item3, AccessToken = user.Item1, RefreshToken = user.Item2 });
     }
 
     [HttpPost("refresh-token")]

@@ -63,7 +63,7 @@ public class AccountService : IAccountService
         return user;
     }
 
-    public async Task<(string, string, User?)> LoginMobileAsync(LoginMobileRequest loginRequest)
+    public async Task<(string, string, Guid?)> LoginMobileAsync(LoginMobileRequest loginRequest)
     {
         var user = await _userManager.FindByEmailAsync(loginRequest.Email);
         
@@ -96,7 +96,7 @@ public class AccountService : IAccountService
         
         await _userManager.UpdateAsync(user);
         
-        return (jwtToken, user.RefreshToken, user);
+        return (jwtToken, user.RefreshToken, user.Id);
     }
     
     public async Task RefreshTokenAsync(string? refreshToken)
