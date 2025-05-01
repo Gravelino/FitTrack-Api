@@ -18,6 +18,7 @@ public class IndividualTrainingRepository : Repository<IndividualTraining>, IInd
 
         var individualTrainings = await _context.IndividualTrainings
             .Include(t => t.Sets)
+            .ThenInclude(s => s.Exercise)
             .Where(t => t.UserId == userId
                         && t.Date >= fromDate
                         && t.Date <= toDate)
