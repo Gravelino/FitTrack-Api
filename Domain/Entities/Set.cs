@@ -9,8 +9,8 @@ public class Set : IEntity
     public int Reps { get; set; }  
     
     public Guid ExerciseId { get; set; }  
-    public Exercise? Exercise { get; set; }
+    public Exercise Exercise { get; set; }
     
     public Guid IndividualTrainingId { get; set; }  
-    public IndividualTraining? IndividualTraining { get; set; }
+    public IndividualTraining IndividualTraining { get; set; }
 }

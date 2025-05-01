@@ -8,5 +8,5 @@ public class Admin
     public Guid UserId { get; set; }
     public User User { get; set; }
     public Guid GymId { get; set; }
-    public Gym? Gym { get; set; }
+    public Gym Gym { get; set; }
 }

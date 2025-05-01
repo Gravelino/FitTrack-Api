@@ -20,18 +20,18 @@ public class User : IdentityUser<Guid>, IEntity
     public Trainer? TrainerProfile { get; set; }
     public Admin? AdminProfile { get; set; }
     
-    public ICollection<GroupTraining>? GroupTrainings { get; set; }
-    public ICollection<IndividualTraining>? IndividualTrainings { get; set; }
+    public ICollection<GroupTraining> GroupTrainings { get; set; }
+    public ICollection<IndividualTraining> IndividualTrainings { get; set; }
 
-    public ICollection<Meal>? Meals { get; set; }
-    public ICollection<WeightsInfo>? Weights { get; set; }
-    public ICollection<StepsInfo>? Steps { get; set; } 
-    public ICollection<Sleep>? Sleeps { get; set; }
+    public ICollection<Meal> Meals { get; set; }
+    public ICollection<WeightsInfo> Weights { get; set; }
+    public ICollection<StepsInfo> Steps { get; set; } 
+    public ICollection<Sleep> Sleeps { get; set; }
     
-    public ICollection<WaterIntakeLog>? WaterIntakeLogs { get; set; }
-    public WaterGlassSetting? WaterGlassSetting { get; set; }
+    public ICollection<WaterIntakeLog> WaterIntakeLogs { get; set; }
+    public WaterGlassSetting WaterGlassSetting { get; set; }
     
-    public ICollection<UserGoal>? Goals { get; set; }
+    public ICollection<UserGoal> Goals { get; set; }
    
     //public ICollection<Purchase>? Purchases { get; set; }
     //public ICollection<UserMembership>? UserMemberships { get; set; }

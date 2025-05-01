@@ -12,11 +12,11 @@ public class Gym : IEntity
     public decimal? Balance { get; set; }
     
     public required Guid OwnerId { get; set; }
-    public Owner? Owner { get; set; }
+    public Owner Owner { get; set; }
 
-    public ICollection<Trainer>? Trainers { get; set; }
-    public ICollection<Admin>? Admins { get; set; }
-    public ICollection<User>? Users { get; set; }
+    public ICollection<Trainer> Trainers { get; set; }
+    public ICollection<Admin> Admins { get; set; }
+    public ICollection<User> Users { get; set; }
 }
 
 public class Address

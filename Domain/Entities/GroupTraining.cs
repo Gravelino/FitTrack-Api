@@ -7,10 +7,10 @@ public class GroupTraining : Training
     public required string Description { get; set; }
 	
     public Guid GymId { get; set; }
-    public Gym? Gym { get; set; }
+    public Gym Gym { get; set; }
 	
     public Guid TrainerId { get; set; }
-    public Trainer? Trainer { get; set; }
+    public Trainer Trainer { get; set; }
 
-    public ICollection<User>? Users { get; set; }
+    public ICollection<User> Users { get; set; }
 }
