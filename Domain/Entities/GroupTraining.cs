@@ -4,6 +4,7 @@ public class GroupTraining : Training
 {
     public required int DurationInMinutes { get; set; }
     public required string ContactPhone { get; set; }
+    public required string Description { get; set; }
 	
     public Guid GymId { get; set; }
     public Gym? Gym { get; set; }
