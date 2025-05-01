@@ -17,6 +17,7 @@ public class IndividualTrainingRepository : Repository<IndividualTraining>, IInd
         toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
 
         var individualTrainings = await _context.IndividualTrainings
+            .Include(t => t.Sets)
             .Where(t => t.UserId == userId
                         && t.Date >= fromDate
                         && t.Date <= toDate)
