@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,16 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     
     public DbSet<IndividualTraining> IndividualTrainings { get; set; }
     public DbSet<GroupTraining> GroupTrainings { get; set; }
+    
+    public DbSet<StepsInfo> Steps { get; set; }
+    public DbSet<Meal> Meals { get; set; }
+    public DbSet<WeightsInfo> Weights { get; set; }
+    public DbSet<Sleep> Sleeps { get; set; }
+    
+    public DbSet<WaterIntakeLog> WaterIntakeLogs { get; set; }
+    public DbSet<WaterGlassSetting> WaterGlassSettings { get; set; }
+    
+    public DbSet<UserGoal> UserGoals { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -98,6 +109,33 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 address.Property(a => a.Building).HasMaxLength(10);
                 address.Property(a => a.ZipCode).HasMaxLength(20);
             });
+        });
+
+        builder.Entity<WaterGlassSetting>()
+            .HasIndex(w => w.UserId)
+            .IsUnique();
+        
+        builder.Entity<UserGoal>(entity =>
+        {
+            entity.HasKey(g => g.Id);
+
+            entity.Property(g => g.GoalType)
+                .HasConversion<string>()
+                .IsRequired();
+
+            entity.Property(g => g.Unit)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            entity.Property(g => g.Value)
+                .IsRequired();
+
+            entity.HasOne(g => g.User)
+                .WithMany(u => u.Goals)
+                .HasForeignKey(g => g.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(g => new { g.UserId, g.GoalType }).IsUnique();
         });
     }
 }
