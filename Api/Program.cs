@@ -71,6 +71,7 @@ builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
 builder.Services.AddScoped<IIndividualTrainingRepository, IndividualTrainingRepository>();
 builder.Services.AddScoped<ISetRepository, SetRepository>();
 builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IWeightsInfoRepository, WeightsInfoRepository>();
 
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
 
