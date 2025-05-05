@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.Abstracts;
+using Application.Abstracts.IServices;
 using Domain.Entities;
 using Domain.Requests;
 using Google.Apis.Auth.OAuth2.Requests;
@@ -126,16 +127,17 @@ public class AccountController: ControllerBase
         return Ok(new { AccessToken = tokens.Item1, RefreshToken = tokens.Item2 });
     }
     
-    [HttpGet("me")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetCurrentUser()
-    {
-        var user = await _accountService.GetCurrentUserAsync(User);
-        return Ok(user);    
-    }
+     [HttpGet("me")]
+     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+     public async Task<IActionResult> GetCurrentUser()
+     {
+         var user = await _accountService.GetCurrentUserAsync(User);
+         return Ok(user);    
+     }
 
     [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteCurrentUser()
     {
         await _accountService.DeleteAsync(User);
@@ -144,6 +146,7 @@ public class AccountController: ControllerBase
     }
     
     [HttpDelete("by-email")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [Authorize]
     public async Task<IActionResult> DeleteUserByEmail([FromBody] DeleteByEmailRequest deleteByEmailRequest)
     {
