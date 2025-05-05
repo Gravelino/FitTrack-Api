@@ -70,7 +70,7 @@ public class AuthTokenProcessor : IAuthTokenProcessor
                 Expires = expiration,
                 IsEssential = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.None   //.Strict
             });
     }
 }
