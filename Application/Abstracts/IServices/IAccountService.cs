@@ -4,7 +4,7 @@ using Domain.Entities;
 using Domain.Requests;
 using Google.Apis.Auth;
 
-namespace Application.Abstracts;
+namespace Application.Abstracts.IServices;
 
 public interface IAccountService
 {

@@ -1,6 +1,6 @@
 using Application.DTOs;
 
-namespace Application.Abstracts;
+namespace Application.Abstracts.IServices;
 
 public interface IOwnerService
 {

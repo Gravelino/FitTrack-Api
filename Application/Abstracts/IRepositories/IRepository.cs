@@ -1,4 +1,4 @@
-namespace Application.Abstracts;
+namespace Application.Abstracts.IRepositories;
 
 public interface IRepository<T> where T : class, IEntity
 {

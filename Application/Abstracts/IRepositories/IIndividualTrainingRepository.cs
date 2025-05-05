@@ -1,6 +1,8 @@
+using Application.DTOs;
+using Application.DTOs.IndividualTraining;
 using Domain.Entities;
 
-namespace Application.Abstracts;
+namespace Application.Abstracts.IRepositories;
 
 public interface IIndividualTrainingRepository : IRepository<IndividualTraining>
 {

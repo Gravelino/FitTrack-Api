@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Application.Abstracts;
+namespace Application.Abstracts.IRepositories;
 
 public interface IUserRepository
 {
