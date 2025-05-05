@@ -1,6 +1,6 @@
 using Application.Abstracts;
 
-namespace Application.DTOs.StepInfo;
+namespace Application.DTOs.StepsInfo;
 
 public class StepInfoUpdateDto: IEntity
 {

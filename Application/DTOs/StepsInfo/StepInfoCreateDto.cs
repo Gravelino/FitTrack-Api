@@ -1,4 +1,4 @@
-namespace Application.DTOs.StepInfo;
+namespace Application.DTOs.StepsInfo;
 
 public class StepInfoCreateDto
 {
