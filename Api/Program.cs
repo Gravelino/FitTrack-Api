@@ -88,7 +88,8 @@ builder.Services.AddAutoMapper(
     typeof(IndividualTrainingProfile),
     typeof(MealProfile),
     typeof(UserGoalProfile),
-    typeof(WeightsInfoProfile)
+    typeof(WeightsInfoProfile),
+    typeof(StepsInfoProfile)
     );
 //builder.Services.AddScoped(typeof(Controller<>));
 
