@@ -80,6 +80,7 @@ builder.Services.AddScoped<IIndividualTrainingService, IndividualTrainingService
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<ICalorieStatisticsService, CalorieStatisticsService>();
 builder.Services.AddScoped<IStepsInfoService, StepsInfoService>();
+builder.Services.AddScoped<IWeightsInfoService, WeightsInfoService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
