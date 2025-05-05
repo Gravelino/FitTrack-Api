@@ -4,6 +4,9 @@ using System.Text.Json.Serialization;
 using Api.Controllers;
 using Api.Handlers;
 using Application.Abstracts;
+using Application.Abstracts.IRepositories;
+using Application.Abstracts.IServices;
+using Application.Mapping;
 using Application.Services;
 using Domain.Entities;
 using Infrastructure;
@@ -23,11 +26,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    });
+builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
@@ -64,16 +63,34 @@ builder.Services.AddDbContext<FitTrackDbContext>(options =>
             .ConfigureDataSource(dataSourceBuilder => dataSourceBuilder.EnableDynamicJson())));
 
 builder.Services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
+builder.Services.AddScoped<IIndividualTrainingRepository, IndividualTrainingRepository>();
+builder.Services.AddScoped<ISetRepository, SetRepository>();
+builder.Services.AddScoped<IMealRepository, MealRepository>();
+
+builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
+
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
+builder.Services.AddScoped<ISetService, SetService>();
+builder.Services.AddScoped<IIndividualTrainingService, IndividualTrainingService>();
+builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<ICalorieStatisticsService, CalorieStatisticsService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IIndividualTrainingRepository, IndividualTrainingRepository>();
-builder.Services.AddScoped<ISetRepository, SetRepository>();
+
+builder.Services.AddAutoMapper(
+    typeof(ExerciseProfile),
+    typeof(SetProfile),
+    typeof(IndividualTrainingProfile),
+    typeof(MealProfile),
+    typeof(UserGoalProfile)
+    );
 //builder.Services.AddScoped(typeof(Controller<>));
 
 builder.Services.AddAuthentication(options =>
