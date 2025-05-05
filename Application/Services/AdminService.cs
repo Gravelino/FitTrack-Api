@@ -1,4 +1,5 @@
 using Application.Abstracts;
+using Application.Abstracts.IServices;
 using Application.DTOs;
 using Domain.Constants;
 using Domain.Entities;
@@ -20,13 +21,20 @@ public class AdminService : IAdminService
     
     public async Task CreateTrainerAsync(CreateStaffDto dto)
     {
-        var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+        var existingUser = await _userManager.FindByNameAsync(dto.Login);
         if (existingUser is not null)
         {
-            throw new UserAlreadyExistsException(dto.Email);
+            throw new UserAlreadyExistsException(dto.Login);
         }
         
-        var user =  User.Create(dto.Email, dto.FirstName, dto.LastName);
+        var user = new User
+        {
+            UserName = dto.Login,
+            PhoneNumber = dto.PhoneNumber,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+        };
+        
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
         var result = await _userManager.CreateAsync(user, dto.Password);
 
