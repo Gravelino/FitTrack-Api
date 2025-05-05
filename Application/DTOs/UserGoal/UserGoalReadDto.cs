@@ -7,4 +7,5 @@ public class UserGoalReadDto: IEntity
     public Guid Id { get; set; }
     public string GoalType { get; set; }
     public int Value { get; set; }
+    public Guid UserId { get; set; }
 }

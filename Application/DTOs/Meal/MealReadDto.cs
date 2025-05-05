@@ -9,4 +9,5 @@ public class MealReadDto : IEntity
     public double Calories { get; set; }
     public int Weight { get; set; }
     public DateTime DateOfConsumption { get; set; }
+    public Guid UserId { get; set; }
 }
