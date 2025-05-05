@@ -11,7 +11,7 @@ namespace Api.Controllers;
 [Authorize]
 public class WeightsInfoController : Controller<WeightsInfoReadDto, WeightsInfoCreateDto, WeightsInfoUpdateDto, WeightsInfo>
 {
-    private new readonly IWeightsInfoService _service;
+    private readonly IWeightsInfoService _service;
 
     public WeightsInfoController(IWeightsInfoService service) : base(service)
     {

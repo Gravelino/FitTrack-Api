@@ -13,7 +13,7 @@ namespace Api.Controllers;
 [ApiController]
 public class SetsController : Controller<SetReadDto, SetCreateDto, SetUpdateDto, Set>
 {
-    private new readonly ISetService _service;
+    private readonly ISetService _service;
 
     public SetsController(ISetService service) : base(service)
     {

@@ -14,7 +14,7 @@ namespace Api.Controllers;
 public class IndividualTrainingsController : Controller<IndividualTrainingReadDto, IndividualTrainingCreateDto,
     IndividualTrainingUpdateDto, IndividualTraining>
 {
-    private new readonly IIndividualTrainingService _service;
+    private readonly IIndividualTrainingService _service;
 
     public IndividualTrainingsController(IIndividualTrainingService service ) : base(service)
     {

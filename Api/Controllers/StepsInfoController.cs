@@ -11,7 +11,7 @@ namespace Api.Controllers;
 [Authorize]
 public class StepsInfoController : Controller<StepsInfoReadDto, StepsInfoCreateDto, StepsInfoUpdateDto, StepsInfo>
 {
-    private new readonly IStepsInfoService _service;
+    private readonly IStepsInfoService _service;
 
     public StepsInfoController(IStepsInfoService service) : base(service)
     {

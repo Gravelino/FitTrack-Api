@@ -11,7 +11,7 @@ public abstract class Controller<TReadDto, TCreateDto, TUpdateDto, TEntity> : Co
     where TUpdateDto : class, IEntity
     where TEntity : class, IEntity
 {
-    protected readonly IService<TReadDto, TCreateDto, TUpdateDto, TEntity> _service;
+    private readonly IService<TReadDto, TCreateDto, TUpdateDto, TEntity> _service;
 
     public Controller(IService<TReadDto, TCreateDto, TUpdateDto, TEntity> service)
     {
