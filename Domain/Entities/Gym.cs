@@ -9,7 +9,6 @@ public class Gym : IEntity
     public required Address Address { get; set; }
     [MaxLength(50)]
     public required string Name { get; set; }
-    public decimal? Balance { get; set; }
     
     public required Guid OwnerId { get; set; }
     public Owner Owner { get; set; }
