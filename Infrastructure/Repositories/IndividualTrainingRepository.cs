@@ -1,4 +1,4 @@
-using Application.Abstracts;
+using Application.Abstracts.IRepositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +23,7 @@ public class IndividualTrainingRepository : Repository<IndividualTraining>, IInd
                         && t.Date >= fromDate
                         && t.Date <= toDate)
             .ToListAsync();
-        
+
         return individualTrainings;
     }
 }

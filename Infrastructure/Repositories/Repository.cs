@@ -1,4 +1,5 @@
 using Application.Abstracts;
+using Application.Abstracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
