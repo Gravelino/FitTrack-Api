@@ -1,4 +1,7 @@
 using Application.Abstracts;
+using Application.Abstracts.IServices;
+using Application.DTOs;
+using Application.DTOs.Set;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,19 +11,19 @@ namespace Api.Controllers;
 [Authorize]
 [Route("/api/[controller]")]
 [ApiController]
-public class SetsController : Controller<Set>
+public class SetsController : Controller<SetReadDto, SetCreateDto, SetUpdateDto, Set>
 {
-    private new readonly ISetRepository _repository;
+    private new readonly ISetService _service;
 
-    public SetsController(ISetRepository repository) : base(repository)
+    public SetsController(ISetService service) : base(service)
     {
-        _repository = repository;
+        _service = service;
     }
 
     [HttpGet("get-by-individual-training-Id/{individualTrainingId:guid}")]
-    public async Task<IActionResult> GetSetsInfoByIndividualTrainingId(Guid individualTrainingId)
+    public async Task<ActionResult<IEnumerable<SetReadDto>>> GetSetsInfoByIndividualTrainingId(Guid individualTrainingId)
     {
-        var sets = await _repository.GetSetsInfoByIndividualTrainingId(individualTrainingId);
+        var sets = await _service.GetSetsInfoByIndividualTrainingId(individualTrainingId);
         if(!sets.Any())
             return NotFound();
         
