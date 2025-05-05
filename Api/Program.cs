@@ -1,7 +1,5 @@
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json.Serialization;
-using Api.Controllers;
 using Api.Handlers;
 using Application.Abstracts;
 using Application.Abstracts.IRepositories;
@@ -16,10 +14,8 @@ using Infrastructure.Processors;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -91,7 +87,8 @@ builder.Services.AddAutoMapper(
     typeof(SetProfile),
     typeof(IndividualTrainingProfile),
     typeof(MealProfile),
-    typeof(UserGoalProfile)
+    typeof(UserGoalProfile),
+    typeof(WeightsInfoProfile)
     );
 //builder.Services.AddScoped(typeof(Controller<>));
 
