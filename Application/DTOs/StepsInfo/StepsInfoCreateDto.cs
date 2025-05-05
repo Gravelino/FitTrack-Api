@@ -1,6 +1,6 @@
 namespace Application.DTOs.StepsInfo;
 
-public class StepInfoCreateDto
+public class StepsInfoCreateDto
 {
     public int Steps { get; set; }
     public DateTime Date { get; set; }
