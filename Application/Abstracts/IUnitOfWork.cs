@@ -1,3 +1,5 @@
+using Application.Abstracts.IRepositories;
+
 namespace Application.Abstracts;
 
 public interface IUnitOfWork

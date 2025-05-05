@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using Application.Abstracts;
+using Application.Abstracts.IRepositories;
+using Application.Abstracts.IServices;
 using Application.DTOs;
 using Domain.Constants;
 using Domain.Entities;
