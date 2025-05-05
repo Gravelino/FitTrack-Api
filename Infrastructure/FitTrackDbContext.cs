@@ -123,10 +123,6 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 .HasConversion<string>()
                 .IsRequired();
 
-            entity.Property(g => g.Unit)
-                .HasMaxLength(10)
-                .IsRequired();
-
             entity.Property(g => g.Value)
                 .IsRequired();
 
