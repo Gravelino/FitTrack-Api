@@ -1,6 +1,7 @@
 using Application.Abstracts.IServices;
 using Application.DTOs.UserGoal;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,17 @@ public class UserGoalController : Controller<UserGoalReadDto, UserGoalCreateDto,
     public async Task<ActionResult<IEnumerable<UserGoalReadDto>>> GetUserGoalsByUserIdAsync(Guid userId)
     {
         var userGoals = await _service.GetUserGoalsByUserIdAsync(userId);
+        if(!userGoals.Any())
+            return NotFound();
+        
+        return Ok(userGoals);
+    }
+    
+    [HttpGet("get-by-userId-and-goal-type/{userId:guid}")]
+    public async Task<ActionResult<IEnumerable<UserGoalReadDto>>> GetUserGoalsByUserIdAsync(Guid userId,
+        [FromQuery] Goal goalType)
+    {
+        var userGoals = await _service.GetAllUserGoalsByUserIdAndGoalTypeAsync(userId, goalType);
         if(!userGoals.Any())
             return NotFound();
         
