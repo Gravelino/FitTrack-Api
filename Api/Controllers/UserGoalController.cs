@@ -31,9 +31,14 @@ public class UserGoalController : Controller<UserGoalReadDto, UserGoalCreateDto,
     
     [HttpGet("get-by-userId-and-goal-type/{userId:guid}")]
     public async Task<ActionResult<IEnumerable<UserGoalReadDto>>> GetUserGoalsByUserIdAsync(Guid userId,
-        [FromQuery] Goal goalType)
+        [FromQuery] string goalType)
     {
-        var userGoals = await _service.GetAllUserGoalsByUserIdAndGoalTypeAsync(userId, goalType);
+        if (!Enum.TryParse<Goal>(goalType, true, out var type))
+        {
+            return BadRequest("Invalid goal type");
+        }
+        
+        var userGoals = await _service.GetAllUserGoalsByUserIdAndGoalTypeAsync(userId, type);
         if(!userGoals.Any())
             return NotFound();
         
