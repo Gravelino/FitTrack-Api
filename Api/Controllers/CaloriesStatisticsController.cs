@@ -22,8 +22,13 @@ public class CaloriesStatisticsController : ControllerBase
         Guid userId,
         [FromQuery] DateTime fromDate,
         [FromQuery] DateTime toDate,
-        [FromQuery] CaloriesGroupBy groupBy)
+        [FromQuery] string caloriesGroupBy)
     {
+        if (!Enum.TryParse<CaloriesGroupBy>(caloriesGroupBy, true, out var groupBy))
+        {
+            return BadRequest("Invalid goal type");
+        }
+        
         var result = await _calorieStatisticsService.GetStatisticsAsync(userId, fromDate, toDate, groupBy);
         return Ok(result);
     }
