@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class StepsInfoProfile : GenericProfile<StepsInfoCreateDto, StepsInfoReadDto, StepsInfoUpdateDto, StepsInfo>
+public class StepsInfoProfile : GenericProfile<StepsInfo, StepsInfoReadDto, StepsInfoCreateDto, StepsInfoUpdateDto>
 {
     public StepsInfoProfile(): base()
     {
