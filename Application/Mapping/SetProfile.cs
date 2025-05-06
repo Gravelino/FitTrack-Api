@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class SetProfile : GenericProfile<Set, SetReadDto, SetCreateDto, SetUpdateDto>
+public class SetProfile : GenericProfile<SetReadDto, SetCreateDto, SetUpdateDto, Set>
 {
     public SetProfile() : base()
     {

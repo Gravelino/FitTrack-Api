@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class MealProfile : GenericProfile<Meal, MealReadDto, MealCreateDto, MealUpdateDto>
+public class MealProfile : GenericProfile<MealReadDto, MealCreateDto, MealUpdateDto, Meal>
 {
     public MealProfile() : base()
     {

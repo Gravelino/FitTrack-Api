@@ -3,8 +3,8 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class WeightsInfoProfile : GenericProfile<WeightsInfo, WeightsInfoReadDto, WeightsInfoCreateDto,
-    WeightsInfoUpdateDto>
+public class WeightsInfoProfile : GenericProfile<WeightsInfoReadDto, WeightsInfoCreateDto, WeightsInfoUpdateDto,
+    WeightsInfo>
 {
     public WeightsInfoProfile(): base()
     {

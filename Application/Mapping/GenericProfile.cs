@@ -2,7 +2,7 @@ using AutoMapper;
 
 namespace Application.Mapping;
 
-public class GenericProfile<TEntity, TReadDto, TCreateDto, TUpdateDto> : Profile
+public class GenericProfile<TReadDto, TCreateDto, TUpdateDto, TEntity> : Profile
 {
     protected GenericProfile()
     {

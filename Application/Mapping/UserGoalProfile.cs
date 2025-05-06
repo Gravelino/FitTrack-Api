@@ -5,7 +5,7 @@ using Domain.Enums;
 
 namespace Application.Mapping;
 
-public class UserGoalProfile : GenericProfile<UserGoalCreateDto, UserGoalReadDto, UserGoalUpdateDto, UserGoal>
+public class UserGoalProfile : GenericProfile<UserGoalReadDto, UserGoalCreateDto, UserGoalUpdateDto, UserGoal>
 {
     public UserGoalProfile()
     {

@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class ExerciseProfile : GenericProfile<Exercise, ExerciseReadDto, ExerciseCreateDto, ExerciseUpdateDto>
+public class ExerciseProfile : GenericProfile<ExerciseReadDto, ExerciseCreateDto, ExerciseUpdateDto, Exercise>
 {
     public ExerciseProfile() : base()
     {
