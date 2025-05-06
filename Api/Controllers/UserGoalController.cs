@@ -9,9 +9,22 @@ namespace Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UserGoalController : Controller<UserGoalCreateDto, UserGoalReadDto, UserGoalUpdateDto, UserGoal>
+public class UserGoalController : Controller<UserGoalReadDto, UserGoalCreateDto, UserGoalUpdateDto, UserGoal>
 {
-    public UserGoalController(IService<UserGoalCreateDto, UserGoalReadDto, UserGoalUpdateDto, UserGoal> service) : base(service)
+    private readonly IUserGoalService _service;
+
+    public UserGoalController(IUserGoalService service) : base(service)
     {
+        _service = service;
+    }
+
+    [HttpGet("get-by-userId/{userId:guid}")]
+    public async Task<ActionResult<IEnumerable<UserGoalReadDto>>> GetUserGoalsByUserIdAsync(Guid userId)
+    {
+        var userGoals = await _service.GetUserGoalsByUserIdAsync(userId);
+        if(!userGoals.Any())
+            return NotFound();
+        
+        return Ok(userGoals);
     }
 }
