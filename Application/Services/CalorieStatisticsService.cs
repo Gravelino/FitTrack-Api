@@ -17,7 +17,7 @@ public class CalorieStatisticsService : ICalorieStatisticsService
     public async Task<CaloriesStatisticsDto> GetStatisticsAsync(Guid userId, DateTime from, DateTime to,
         CaloriesGroupBy groupBy)
     {
-        var meals = await _repository.GetCaloriesByUserIdAndPeriodAsync(userId, from, to);
+        var meals = await _repository.GetMealsByUserIdAndPeriodAsync(userId, from, to);
 
         var groupedData = groupBy switch
         {

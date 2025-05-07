@@ -21,7 +21,7 @@ public class MealRepository : Repository<Meal>, IMealRepository
         return meals;
     }
 
-    public async Task<IEnumerable<Meal>> GetCaloriesByUserIdAndPeriodAsync(Guid userId, DateTime fromDate, DateTime toDate)
+    public async Task<IEnumerable<Meal>> GetMealsByUserIdAndPeriodAsync(Guid userId, DateTime fromDate, DateTime toDate)
     {
         fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
         toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
