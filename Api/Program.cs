@@ -70,6 +70,7 @@ builder.Services.AddScoped<IMealRepository, MealRepository>();
 builder.Services.AddScoped<IWeightsInfoRepository, WeightsInfoRepository>();
 builder.Services.AddScoped<IStepsInfoRepository, StepsInfoRepository>();
 builder.Services.AddScoped<IUserGoalRepository, UserGoalRepository>();
+builder.Services.AddScoped<ISleepRepository, SleepRepository>();
 
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
 
@@ -83,6 +84,8 @@ builder.Services.AddScoped<ICalorieStatisticsService, CalorieStatisticsService>(
 builder.Services.AddScoped<IStepsInfoService, StepsInfoService>();
 builder.Services.AddScoped<IWeightsInfoService, WeightsInfoService>();
 builder.Services.AddScoped<IUserGoalService, UserGoalService>();
+builder.Services.AddScoped<ISleepService, SleepService>();
+builder.Services.AddScoped<ISleepStatisticService, SleepStatisticService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -93,7 +96,8 @@ builder.Services.AddAutoMapper(
     typeof(MealProfile),
     typeof(UserGoalProfile),
     typeof(WeightsInfoProfile),
-    typeof(StepsInfoProfile)
+    typeof(StepsInfoProfile),
+    typeof(SleepProfile)
     );
 //builder.Services.AddScoped(typeof(Controller<>));
 
