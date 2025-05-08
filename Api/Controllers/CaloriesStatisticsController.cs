@@ -28,6 +28,10 @@ public class CaloriesStatisticsController : ControllerBase
         {
             return BadRequest("Invalid goal type");
         }
+        if (fromDate > toDate)
+        {
+            return BadRequest("Invalid date");
+        }
         
         var result = await _calorieStatisticsService.GetStatisticsAsync(userId, fromDate, toDate, groupBy);
         return Ok(result);
