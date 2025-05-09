@@ -15,7 +15,7 @@ public class WaterIntakeLogRepository : Repository<WaterIntakeLog>, IWaterIntake
         date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
         
         var waterIntakeLogs = await _context.WaterIntakeLogs
-            .Where(w => w.UserId == userId && date.Date == w.Date)
+            .Where(w => w.UserId == userId && date.Date == w.Date.Date)
             .ToListAsync();
         
         return waterIntakeLogs;
