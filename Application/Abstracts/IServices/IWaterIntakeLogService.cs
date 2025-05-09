@@ -6,5 +6,5 @@ namespace Application.Abstracts.IServices;
 public interface IWaterIntakeLogService: IService<WaterIntakeLogReadDto, WaterIntakeLogCreateDto,
     WaterIntakeLogUpdateDto, WaterIntakeLog>
 {
-    public Task<IEnumerable<WaterIntakeLogReadDto>> GetByUserIdAndDayAsync(Guid userId, DateTime date);
+    public Task<IEnumerable<WaterIntakeLogReadDto>> GetWaterIntakeLogsByUserIdAndDayAsync(Guid userId, DateTime date);
 }

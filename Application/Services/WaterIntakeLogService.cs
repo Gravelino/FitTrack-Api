@@ -16,7 +16,7 @@ public class WaterIntakeLogService: Service<WaterIntakeLogReadDto, WaterIntakeLo
         _repository = repository;
     }
 
-    public async Task<IEnumerable<WaterIntakeLogReadDto>> GetByUserIdAndDayAsync(Guid userId, DateTime date)
+    public async Task<IEnumerable<WaterIntakeLogReadDto>> GetWaterIntakeLogsByUserIdAndDayAsync(Guid userId, DateTime date)
     {
         var waterIntakeLogs = await _repository.GetByUserIdAndDayAsync(userId, date);
         return _mapper.Map<IEnumerable<WaterIntakeLogReadDto>>(waterIntakeLogs);
