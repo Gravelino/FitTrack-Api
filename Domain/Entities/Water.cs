@@ -11,12 +11,3 @@ public class WaterIntakeLog : IEntity
     public Guid UserId { get; set; }
     public User User { get; set; }
 }
-
-public class WaterGlassSetting : IEntity
-{
-    public Guid Id { get; set; }
-    public required int DefaultGlassVolumeMl { get; set; }
-    
-    public Guid UserId { get; set; }
-    public User User { get; set; }
-}

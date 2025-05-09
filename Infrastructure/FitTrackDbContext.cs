@@ -32,8 +32,6 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<Sleep> Sleeps { get; set; }
     
     public DbSet<WaterIntakeLog> WaterIntakeLogs { get; set; }
-    public DbSet<WaterGlassSetting> WaterGlassSettings { get; set; }
-    
     public DbSet<UserGoal> UserGoals { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
@@ -110,10 +108,6 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 address.Property(a => a.ZipCode).HasMaxLength(20);
             });
         });
-
-        builder.Entity<WaterGlassSetting>()
-            .HasIndex(w => w.UserId)
-            .IsUnique();
         
         builder.Entity<UserGoal>(entity =>
         {

@@ -29,7 +29,6 @@ public class User : IdentityUser<Guid>, IEntity
     public ICollection<Sleep> Sleeps { get; set; }
     
     public ICollection<WaterIntakeLog> WaterIntakeLogs { get; set; }
-    public WaterGlassSetting WaterGlassSetting { get; set; }
     
     public ICollection<UserGoal> Goals { get; set; }
    
