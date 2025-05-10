@@ -89,6 +89,7 @@ builder.Services.AddScoped<IUserGoalService, UserGoalService>();
 builder.Services.AddScoped<ISleepService, SleepService>();
 builder.Services.AddScoped<ISleepStatisticService, SleepStatisticService>();
 builder.Services.AddScoped<IWaterIntakeLogService, WaterIntakeLogService>();
+builder.Services.AddScoped<IGymService, GymService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
