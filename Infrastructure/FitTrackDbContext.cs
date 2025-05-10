@@ -33,6 +33,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     
     public DbSet<WaterIntakeLog> WaterIntakeLogs { get; set; }
     public DbSet<UserGoal> UserGoals { get; set; }
+    public DbSet<GymFeedback> GymFeedbacks { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

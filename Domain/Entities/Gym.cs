@@ -16,6 +16,9 @@ public class Gym : IEntity
     public ICollection<Trainer> Trainers { get; set; }
     public ICollection<Admin> Admins { get; set; }
     public ICollection<User> Users { get; set; }
+    
+    public ICollection<GroupTraining> GroupTrainings { get; set; }
+    public ICollection<GymFeedback> Feedbacks { get; set; }
 }
 
 public class Address
