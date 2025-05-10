@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Application.Abstracts;
 
 namespace Domain.Entities;
@@ -13,6 +14,12 @@ public class Gym : IEntity
     public required Guid OwnerId { get; set; }
     public Owner Owner { get; set; }
 
+    public int RatingCount { get; set; } = 0;
+    public int RatingSum { get; set; } = 0;
+
+    [NotMapped]
+    public double AverageRating => RatingCount == 0 ? 0 : Math.Round((double)RatingSum / RatingCount, 1);
+    
     public ICollection<Trainer> Trainers { get; set; }
     public ICollection<Admin> Admins { get; set; }
     public ICollection<User> Users { get; set; }
