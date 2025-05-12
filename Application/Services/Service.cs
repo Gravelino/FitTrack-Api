@@ -30,13 +30,13 @@ public class Service<TReadDto, TCreateDto, TUpdateDto, TEntity> : IService<TRead
         return _mapper.Map<TReadDto>(entity);
     }
 
-    public async Task<Guid> CreateAsync(TCreateDto dto)
+    public virtual async Task<Guid> CreateAsync(TCreateDto dto)
     {
         var entity = _mapper.Map<TEntity>(dto);
         return await _repository.AddAsync(entity);
     }
 
-    public async Task UpdateAsync(Guid id, TUpdateDto dto)
+    public virtual async Task UpdateAsync(Guid id, TUpdateDto dto)
     {
         var entity = await _repository.GetByIdAsync(id);
         if(entity is null)
