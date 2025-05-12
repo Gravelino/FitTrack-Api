@@ -13,9 +13,12 @@ public class Gym : IEntity
     
     public required Guid OwnerId { get; set; }
     public Owner Owner { get; set; }
+    
+    public required string MainImageUrl { get; set; }
+    public ICollection<GymImage> Images { get; set; }
 
-    public int RatingCount { get; set; } = 0;
-    public int RatingSum { get; set; } = 0;
+    public int RatingCount { get; set; }
+    public int RatingSum { get; set; }
 
     [NotMapped]
     public double AverageRating => RatingCount == 0 ? 0 : Math.Round((double)RatingSum / RatingCount, 1);
