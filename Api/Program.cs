@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using System.Text;
+using Amazon.S3;
 using Api.Handlers;
 using Application.Abstracts;
 using Application.Abstracts.IRepositories;
 using Application.Abstracts.IServices;
 using Application.Mapping;
+using Application.Mapping.Resolvers;
 using Application.Services;
 using Domain.Entities;
 using Infrastructure;
@@ -73,6 +75,7 @@ builder.Services.AddScoped<IUserGoalRepository, UserGoalRepository>();
 builder.Services.AddScoped<ISleepRepository, SleepRepository>();
 builder.Services.AddScoped<IWaterIntakeLogRepository, WaterIntakeLogRepository>();
 builder.Services.AddScoped<IGymRepository, GymRepository>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
 
@@ -90,6 +93,7 @@ builder.Services.AddScoped<ISleepService, SleepService>();
 builder.Services.AddScoped<ISleepStatisticService, SleepStatisticService>();
 builder.Services.AddScoped<IWaterIntakeLogService, WaterIntakeLogService>();
 builder.Services.AddScoped<IGymService, GymService>();
+builder.Services.AddScoped<IS3Service, S3Service>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -105,7 +109,12 @@ builder.Services.AddAutoMapper(
     typeof(WaterIntakeLogProfile),
     typeof(GymProfile)
     );
-//builder.Services.AddScoped(typeof(Controller<>));
+
+builder.Services.AddScoped<MainImageUrlResolver>();
+builder.Services.AddScoped<ImagesResolver>();
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions("AWS"));
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddAuthentication(options =>
 {
