@@ -9,10 +9,11 @@ namespace Api.Extensions;
 
 public static class ApplicationServiceExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
         
+        services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IOwnerService, OwnerService>();
         services.AddScoped<IAdminService, AdminService>();
@@ -31,12 +32,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IMembershipService, MembershipService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
-
+        
         services.AddScoped<MainImageUrlResolver>();
         services.AddScoped<ImagesResolver>();
-
-        return services;
     }
 }

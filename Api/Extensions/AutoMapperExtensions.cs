@@ -4,7 +4,7 @@ namespace Api.Extensions;
 
 public static class AutoMapperExtensions
 {
-    public static IServiceCollection AddAutoMapperProfiles(this IServiceCollection services)
+    public static void AddAutoMapperProfiles(this IServiceCollection services)
     {
         services.AddAutoMapper(
             typeof(ExerciseProfile),
@@ -19,7 +19,5 @@ public static class AutoMapperExtensions
             typeof(GymProfile),
             typeof(MembershipProfile)
         );
-
-        return services;
     }
 }

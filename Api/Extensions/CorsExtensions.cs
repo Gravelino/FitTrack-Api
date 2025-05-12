@@ -2,7 +2,7 @@ namespace Api.Extensions;
 
 public static class CorsExtensions
 {
-    public static IServiceCollection AddCustomCors(this IServiceCollection services)
+    public static void AddCustomCors(this IServiceCollection services)
     {
         services.AddCors(opt =>
         {
@@ -14,7 +14,5 @@ public static class CorsExtensions
                     .SetIsOriginAllowed(_ => true);
             });
         });
-
-        return services;
     }
 }

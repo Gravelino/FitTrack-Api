@@ -5,7 +5,7 @@ namespace Api.Extensions;
 
 public static class RepositoryServiceExtensions
 {
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUserRepository, UserRepository>();
@@ -22,7 +22,5 @@ public static class RepositoryServiceExtensions
         services.AddScoped<IGymRepository, GymRepository>();
         services.AddScoped<IOwnerRepository, OwnerRepository>();
         services.AddScoped<IMembershipRepository, MembershipRepository>();
-
-        return services;
     }
 }

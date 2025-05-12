@@ -6,7 +6,7 @@ namespace Api.Extensions;
 
 public static class IdentityExtensions
 {
-    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IConfiguration configuration)
+    public static void AddCustomIdentity(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<User, IdentityRole<Guid>>(options =>
         {
@@ -17,7 +17,5 @@ public static class IdentityExtensions
             options.Password.RequiredLength = 8;
             options.User.RequireUniqueEmail = true;
         }).AddEntityFrameworkStores<FitTrackDbContext>();
-
-        return services;
     }
 }
