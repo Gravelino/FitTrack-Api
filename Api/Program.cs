@@ -108,7 +108,8 @@ builder.Services.AddAutoMapper(
     typeof(StepsInfoProfile),
     typeof(SleepProfile),
     typeof(WaterIntakeLogProfile),
-    typeof(GymProfile)
+    typeof(GymProfile),
+    typeof(MembershipProfile)
     );
 
 builder.Services.AddScoped<MainImageUrlResolver>();
