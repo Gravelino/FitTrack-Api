@@ -5,5 +5,5 @@ namespace Application.Abstracts.IServices;
 
 public interface IMembershipService: IService<MembershipReadDto, MembershipCreateDto, MembershipUpdateDto, Membership>
 {
-    Task<MembershipReadDto> GetMembershipByGymIdAsync(Guid gymId);
+    Task<IEnumerable<MembershipReadDto>> GetMembershipByGymIdAsync(Guid gymId);
 }

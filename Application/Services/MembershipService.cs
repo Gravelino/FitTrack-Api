@@ -16,9 +16,9 @@ public class MembershipService: Service<MembershipReadDto, MembershipCreateDto, 
         _repository = repository;
     }
 
-    public async Task<MembershipReadDto> GetMembershipByGymIdAsync(Guid gymId)
+    public async Task<IEnumerable<MembershipReadDto>> GetMembershipByGymIdAsync(Guid gymId)
     {
         var memberships = await _repository.GetMembershipsByGymIdAsync(gymId);
-        return _mapper.Map<MembershipReadDto>(memberships);
+        return _mapper.Map<IEnumerable<MembershipReadDto>>(memberships);
     }
 }
