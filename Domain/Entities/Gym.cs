@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Abstracts;
@@ -29,6 +30,7 @@ public class Gym : IEntity
     
     public ICollection<GroupTraining> GroupTrainings { get; set; }
     public ICollection<GymFeedback> Feedbacks { get; set; }
+    public ICollection<Membership> Memberships { get; set; }
 }
 
 public class Address
