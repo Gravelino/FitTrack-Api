@@ -1,24 +1,13 @@
 using System.Security.Claims;
 using System.Text;
-using Amazon.S3;
+using Api.Extensions;
 using Api.Handlers;
-using Application.Abstracts;
-using Application.Abstracts.IRepositories;
-using Application.Abstracts.IServices;
-using Application.Mapping;
-using Application.Mapping.Resolvers;
-using Application.Services;
-using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Extensions;
 using Infrastructure.Options;
-using Infrastructure.Processors;
-using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 
@@ -31,93 +20,13 @@ builder.Services.AddOpenApi();
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection(JwtOptions.JwtOptionsKey));
 
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy("CorsPolicy", options =>
-    {
-        options.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .SetIsOriginAllowed(_ => true);  
-            //.AllowAnyOrigin();
-        //.WithOrigins("http://localhost:3000");
-    });
-});
-
-builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 8;
-    options.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<FitTrackDbContext>();
-
-builder.Services.AddDbContext<FitTrackDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        npgsqlOptions => npgsqlOptions
-            .ConfigureDataSource(dataSourceBuilder => dataSourceBuilder.EnableDynamicJson())));
-
-builder.Services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
-
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
-builder.Services.AddScoped<IIndividualTrainingRepository, IndividualTrainingRepository>();
-builder.Services.AddScoped<ISetRepository, SetRepository>();
-builder.Services.AddScoped<IMealRepository, MealRepository>();
-builder.Services.AddScoped<IWeightsInfoRepository, WeightsInfoRepository>();
-builder.Services.AddScoped<IStepsInfoRepository, StepsInfoRepository>();
-builder.Services.AddScoped<IUserGoalRepository, UserGoalRepository>();
-builder.Services.AddScoped<ISleepRepository, SleepRepository>();
-builder.Services.AddScoped<IWaterIntakeLogRepository, WaterIntakeLogRepository>();
-builder.Services.AddScoped<IGymRepository, GymRepository>();
-builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
-builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
-
-builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
-
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IOwnerService, OwnerService>();
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<ISetService, SetService>();
-builder.Services.AddScoped<IIndividualTrainingService, IndividualTrainingService>();
-builder.Services.AddScoped<IMealService, MealService>();
-builder.Services.AddScoped<ICalorieStatisticsService, CalorieStatisticsService>();
-builder.Services.AddScoped<IStepsInfoService, StepsInfoService>();
-builder.Services.AddScoped<IWeightsInfoService, WeightsInfoService>();
-builder.Services.AddScoped<IUserGoalService, UserGoalService>();
-builder.Services.AddScoped<ISleepService, SleepService>();
-builder.Services.AddScoped<ISleepStatisticService, SleepStatisticService>();
-builder.Services.AddScoped<IWaterIntakeLogService, WaterIntakeLogService>();
-builder.Services.AddScoped<IGymService, GymService>();
-builder.Services.AddScoped<IS3Service, S3Service>();
-builder.Services.AddScoped<IMembershipService, MembershipService>();
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddAutoMapper(
-    typeof(ExerciseProfile),
-    typeof(SetProfile),
-    typeof(IndividualTrainingProfile),
-    typeof(MealProfile),
-    typeof(UserGoalProfile),
-    typeof(WeightsInfoProfile),
-    typeof(StepsInfoProfile),
-    typeof(SleepProfile),
-    typeof(WaterIntakeLogProfile),
-    typeof(GymProfile),
-    typeof(MembershipProfile)
-    );
-
-builder.Services.AddScoped<MainImageUrlResolver>();
-builder.Services.AddScoped<ImagesResolver>();
-
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions("AWS"));
-builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddCustomCors();
+builder.Services.AddCustomIdentity(builder.Configuration);
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddRepositories();
+builder.Services.AddApplicationServices();
+builder.Services.AddAutoMapperProfiles();
+builder.Services.AddAwsServices(builder.Configuration);
 
 builder.Services.AddAuthentication(options =>
 {
