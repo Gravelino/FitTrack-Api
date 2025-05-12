@@ -40,7 +40,7 @@ public abstract class Controller<TReadDto, TCreateDto, TUpdateDto, TEntity> : Co
     
     [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create(TCreateDto dto)
+    public virtual async Task<ActionResult<Guid>> Create(TCreateDto dto)
     {
         var entityId = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(GetById), new { id = entityId }, entityId);
@@ -50,7 +50,7 @@ public abstract class Controller<TReadDto, TCreateDto, TUpdateDto, TEntity> : Co
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, TUpdateDto dto)
+    public virtual async Task<IActionResult> Update(Guid id, TUpdateDto dto)
     {
         if (id != dto.Id)
         {
