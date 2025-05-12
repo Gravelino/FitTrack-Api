@@ -13,6 +13,8 @@ public class User : IdentityUser<Guid>, IEntity
     
     public int? Height { get; set; }
     
+    public Guid? GymId { get; set; }
+    public Gym? Gym { get; set; }
     public Guid? TrainerId { get; set; }
     public Trainer? Trainer { get; set; }
     

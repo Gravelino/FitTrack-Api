@@ -34,7 +34,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Exercise", b =>
@@ -53,7 +53,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupTraining", b =>
@@ -88,7 +88,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TrainerId");
 
-                    b.ToTable("GroupTrainings");
+                    b.ToTable("GroupTrainings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Gym", b =>
@@ -119,7 +119,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Gyms");
+                    b.ToTable("Gyms", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GymFeedback", b =>
@@ -152,7 +152,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GymFeedbacks");
+                    b.ToTable("GymFeedbacks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GymImage", b =>
@@ -172,7 +172,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymImages");
+                    b.ToTable("GymImages", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.IndividualTraining", b =>
@@ -196,7 +196,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("IndividualTrainings");
+                    b.ToTable("IndividualTrainings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Meal", b =>
@@ -225,7 +225,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Membership", b =>
@@ -257,7 +257,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("Memberships");
+                    b.ToTable("Memberships", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Owner", b =>
@@ -267,7 +267,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Owners");
+                    b.ToTable("Owners", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Set", b =>
@@ -294,7 +294,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IndividualTrainingId");
 
-                    b.ToTable("Sets");
+                    b.ToTable("Sets", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Sleep", b =>
@@ -316,7 +316,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sleeps");
+                    b.ToTable("Sleeps", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StepsInfo", b =>
@@ -338,7 +338,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Steps");
+                    b.ToTable("Steps", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Trainer", b =>
@@ -360,7 +360,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Trainers");
+                    b.ToTable("Trainers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -481,7 +481,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId", "GoalType")
                         .IsUnique();
 
-                    b.ToTable("UserGoals");
+                    b.ToTable("UserGoals", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserMembership", b =>
@@ -505,7 +505,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("MembershipId");
 
-                    b.ToTable("UserMemberships");
+                    b.ToTable("UserMemberships", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WaterIntakeLog", b =>
@@ -527,7 +527,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WaterIntakeLogs");
+                    b.ToTable("WaterIntakeLogs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.WeightsInfo", b =>
@@ -549,7 +549,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Weights");
+                    b.ToTable("Weights", (string)null);
                 });
 
             modelBuilder.Entity("GroupTrainingUser", b =>
@@ -564,7 +564,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("GroupTrainingUser");
+                    b.ToTable("GroupTrainingUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -801,7 +801,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("GymId");
 
-                            b1.ToTable("Gyms");
+                            b1.ToTable("Gyms", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("GymId");
