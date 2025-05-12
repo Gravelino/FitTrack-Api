@@ -34,6 +34,9 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<WaterIntakeLog> WaterIntakeLogs { get; set; }
     public DbSet<UserGoal> UserGoals { get; set; }
     public DbSet<GymFeedback> GymFeedbacks { get; set; }
+    public DbSet<GymImage> GymImages { get; set; }
+    public DbSet<Membership> Memberships { get; set; }
+    public DbSet<UserMembership> UserMemberships { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -128,5 +131,18 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
 
             entity.HasIndex(g => new { g.UserId, g.GoalType }).IsUnique();
         });
+        
+        builder.Entity<UserMembership>()
+            .HasKey(um => new { um.UserId, um.MembershipId });
+
+        builder.Entity<UserMembership>()
+            .HasOne(um => um.User)
+            .WithMany(u => u.UserMemberships)
+            .HasForeignKey(um => um.UserId);
+
+        builder.Entity<UserMembership>()
+            .HasOne(um => um.Membership)
+            .WithMany(m => m.UserMemberships)
+            .HasForeignKey(um => um.MembershipId);
     }
 }
