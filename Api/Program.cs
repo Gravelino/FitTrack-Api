@@ -76,6 +76,7 @@ builder.Services.AddScoped<ISleepRepository, SleepRepository>();
 builder.Services.AddScoped<IWaterIntakeLogRepository, WaterIntakeLogRepository>();
 builder.Services.AddScoped<IGymRepository, GymRepository>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
 
 builder.Services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
 
