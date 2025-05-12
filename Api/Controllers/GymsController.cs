@@ -1,5 +1,6 @@
 using Application.Abstracts.IServices;
 using Application.DTOs.Gym;
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,4 +28,37 @@ public class GymsController : Controller<GymReadDto, GymCreateDto, GymUpdateDto,
         
         return Ok(gyms);
     }
+
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    [HttpPost("create-with-images")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<Guid>> Create([FromForm] GymCreateDto dto,
+        [FromForm] IFormFile mainImage, [FromForm] List<IFormFile> additionalImages)
+    {
+        var gymId = await _service.CreateAsync(dto, mainImage, additionalImages);
+        return CreatedAtAction(nameof(GetById), new { id = gymId }, gymId);
+    }
+    
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    [HttpPut("{id:guid}/update-with-images")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Update(Guid id, [FromForm] GymUpdateDto dto,
+        [FromForm] IFormFile mainImage, [FromForm] List<IFormFile> additionalImages)
+    {
+        if (id != dto.Id)
+        {
+            return BadRequest();
+        }
+        
+        await _service.UpdateAsync(id, dto, mainImage, additionalImages);
+        return NoContent();
+    }
+    
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    public override async Task<IActionResult> Delete(Guid id) =>
+        await base.Delete(id);   
 }
