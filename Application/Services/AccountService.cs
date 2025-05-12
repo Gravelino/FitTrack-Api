@@ -19,14 +19,16 @@ public class AccountService : IAccountService
     private readonly IAuthTokenProcessor _authTokenProcessor;
     private readonly UserManager<User> _userManager;
     private readonly IUserRepository _userRepository;
+    private readonly IOwnerService _ownerService;
     private readonly string _googleClientId;
 
     public AccountService(IAuthTokenProcessor authTokenProcessor, UserManager<User> userManager,
-        IUserRepository userRepository, IConfiguration config)
+        IUserRepository userRepository, IConfiguration config, IOwnerService ownerService)
     {
         _authTokenProcessor = authTokenProcessor;
         _userManager = userManager;
         _userRepository = userRepository;
+        _ownerService = ownerService;
         _googleClientId = config["Authentication:Google:ClientId"]!;
     }
 
@@ -195,15 +197,24 @@ public class AccountService : IAccountService
                 EmailConfirmed = true,
             };
             
-            var result = await _userManager.CreateAsync(newUser);
+            var resultCreate = await _userManager.CreateAsync(newUser);
 
-            if (!result.Succeeded)
+            if (!resultCreate.Succeeded)
             {
                 throw new ExternalLoginProviderException("Google",
                     $"Unable to create new user: {string.Join(", ",
-                        result.Errors.Select(e => e.Description))}");
+                        resultCreate.Errors.Select(e => e.Description))}");
+            }
+            
+            var resultAddToRole = await _userManager.AddToRoleAsync(newUser, IdentityRoleConstants.Owner);
+
+            if (!resultAddToRole.Succeeded)
+            {
+                throw new RegistrationFailedException(resultAddToRole.Errors.Select(e => e.Description));
             }
 
+            await _ownerService.CreateOwnerProfileAsync(newUser);
+            
             user = newUser;
         }
         
