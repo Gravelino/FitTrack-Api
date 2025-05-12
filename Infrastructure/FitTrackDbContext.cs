@@ -111,6 +111,8 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 address.Property(a => a.Building).HasMaxLength(10);
                 address.Property(a => a.ZipCode).HasMaxLength(20);
             });
+            
+            entity.Navigation(g => g.Images).AutoInclude();
         });
         
         builder.Entity<UserGoal>(entity =>
