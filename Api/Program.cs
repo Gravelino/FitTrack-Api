@@ -95,6 +95,7 @@ builder.Services.AddScoped<ISleepStatisticService, SleepStatisticService>();
 builder.Services.AddScoped<IWaterIntakeLogService, WaterIntakeLogService>();
 builder.Services.AddScoped<IGymService, GymService>();
 builder.Services.AddScoped<IS3Service, S3Service>();
+builder.Services.AddScoped<IMembershipService, MembershipService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
