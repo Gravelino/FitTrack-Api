@@ -64,7 +64,7 @@ public abstract class Controller<TReadDto, TCreateDto, TUpdateDto, TEntity> : Co
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public virtual async Task<IActionResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
         return NoContent();
