@@ -1,5 +1,3 @@
-using Application.Abstracts;
-
 namespace Domain.Entities;
 
 public class UserMembership
@@ -11,6 +9,6 @@ public class UserMembership
     public Membership Membership { get; set; }
 
     public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
-    public DateTime? ExpirationDate { get; set; }
+    public DateTime? ExpirationDate { get => ExpirationDate; set => PurchaseDate.AddMonths(Membership.DurationMonth ?? 1); }
     public int? RemainingSessions { get; set; }
 }
