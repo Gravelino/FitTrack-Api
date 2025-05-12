@@ -59,4 +59,17 @@ public class OwnerService : IOwnerService
         await _unitOfWork.Admins.AddAsync(adminProfile);
         await _unitOfWork.SaveChangesAsync();
     }
+
+    public async Task CreateOwnerProfileAsync(User user)
+    {
+        var ownerProfile = new Owner
+        {
+            UserId = user.Id,
+        };
+            
+        user.OwnerProfile = ownerProfile;
+        
+        await _unitOfWork.Owners.AddAsync(ownerProfile);
+        await _unitOfWork.SaveChangesAsync();
+    }
 }
