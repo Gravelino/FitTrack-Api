@@ -8,7 +8,6 @@ public class AdminProfile : Profile
 {
     public AdminProfile()
     {
-        
         CreateMap<GymStaffCreateDto, User>()
             .ForMember(dest => dest.UserName, opt =>
                 opt.MapFrom(src => src.Login))
@@ -47,6 +46,10 @@ public class AdminProfile : Profile
                 opt.MapFrom(src => src.FirstName))
             .ForMember(dest => dest.LastName, opt =>
                 opt.MapFrom(src => src.LastName))
+            .ForMember(dest => dest.PhoneNumber, opt =>
+                opt.MapFrom(src => src.PhoneNumber))
+            .ForMember(dest => dest.UserName, opt =>
+                opt.MapFrom(src => src.Login))
             .ForAllMembers(opt => opt.Ignore());
     }
 }
