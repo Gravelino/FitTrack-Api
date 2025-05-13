@@ -17,6 +17,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IOwnerService, OwnerService>();
         services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<ITrainerService, TrainerService>();
         services.AddScoped<ISetService, SetService>();
         services.AddScoped<IIndividualTrainingService, IndividualTrainingService>();
         services.AddScoped<IMealService, MealService>();
