@@ -1,10 +1,9 @@
-using Application.DTOs;
+using Application.DTOs.GymStaff;
 using Domain.Entities;
 
 namespace Application.Abstracts.IServices;
 
 public interface IOwnerService
 {
-    Task CreateAdminAsync(CreateStaffDto dto);
     Task CreateOwnerProfileAsync(User user);
 }
