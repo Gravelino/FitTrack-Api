@@ -16,12 +16,15 @@ public class TrainerRepository : ITrainerRepository
     public async Task<Trainer?> GetByIdAsync(Guid id)
     {
         return await _context.Trainers
+            .Include(t => t.User)
             .FirstOrDefaultAsync(t => t.Id == id);
     }
 
     public async Task<IEnumerable<Trainer>> GetAllAsync()
     {
-        return await _context.Trainers.ToListAsync();
+        return await _context.Trainers
+            .Include(t => t.User)
+            .ToListAsync();
     }
 
     public async Task AddAsync(Trainer trainer)
@@ -46,6 +49,7 @@ public class TrainerRepository : ITrainerRepository
     {
         var trainers = await _context.Trainers
             .Where(t => t.GymId == gymId)
+            .Include(t => t.User)
             .ToListAsync();
         
         return trainers;
