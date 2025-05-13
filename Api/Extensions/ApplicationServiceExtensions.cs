@@ -31,6 +31,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IGymService, GymService>();
         services.AddScoped<IS3Service, S3Service>();
         services.AddScoped<IMembershipService, MembershipService>();
+        services.AddScoped<IGymFeedbackService, GymFeedbackService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
