@@ -60,7 +60,7 @@ public class ProductsController: Controller<ProductReadDto, ProductCreateDto, Pr
     [Authorize(Roles = IdentityRoleConstants.Admin)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost("add-good")]
-    public async Task<ActionResult<Guid>> AddGood(ProductCreateDto dto, IFormFile file)
+    public async Task<ActionResult<Guid>> AddGood([FromForm ]ProductCreateDto dto, [FromForm] IFormFile file)
     {
         var id = await _service.CreateGoodAsync(dto, file);
         return CreatedAtAction(nameof(GetById), new { Id = id }, id);
@@ -71,7 +71,7 @@ public class ProductsController: Controller<ProductReadDto, ProductCreateDto, Pr
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("update-good/{id:guid}")]
-    public async Task<IActionResult> UpdateGood(Guid id, ProductUpdateDto dto, IFormFile file)
+    public async Task<IActionResult> UpdateGood([FromForm] Guid id, [FromForm] ProductUpdateDto dto, [FromForm] IFormFile file)
     {
         if(id != dto.Id)
             return BadRequest();
