@@ -6,7 +6,9 @@ namespace Application.DTOs.GymStaff;
 public class GymStaffUpdateDto: IEntity
 {
     public Guid Id { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
-    
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? Login { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string? NewPassword { get; set; }
 }
