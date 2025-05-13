@@ -31,6 +31,7 @@ public class Gym : IEntity
     public ICollection<GroupTraining> GroupTrainings { get; set; }
     public ICollection<GymFeedback> Feedbacks { get; set; }
     public ICollection<Membership> Memberships { get; set; }
+    public ICollection<Product> Products { get; set; }
 }
 
 public class Address

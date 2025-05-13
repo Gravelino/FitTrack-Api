@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +36,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<GymImage> GymImages { get; set; }
     public DbSet<Membership> Memberships { get; set; }
     public DbSet<UserMembership> UserMemberships { get; set; }
+    public DbSet<Product> Products { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
