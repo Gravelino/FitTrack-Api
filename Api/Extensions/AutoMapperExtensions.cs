@@ -19,7 +19,8 @@ public static class AutoMapperExtensions
             typeof(GymProfile),
             typeof(MembershipProfile),
             typeof(AdminProfile),
-            typeof(TrainerProfile)
+            typeof(TrainerProfile),
+            typeof(GymFeedbackProfile)
         );
     }
 }
