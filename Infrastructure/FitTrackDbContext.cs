@@ -100,6 +100,12 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
             .WithOne(u => u.AdminProfile)
             .HasForeignKey<Admin>(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Admin>().Navigation(a => a.User).AutoInclude();
+        
+        builder.Entity<Trainer>().Navigation(t => t.User).AutoInclude();
+        
+        builder.Entity<Owner>().Navigation(o => o.User).AutoInclude();
         
         builder.Entity<Gym>(entity =>
         {
@@ -146,5 +152,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
             .HasOne(um => um.Membership)
             .WithMany(m => m.UserMemberships)
             .HasForeignKey(um => um.MembershipId);
+        
+        builder.Entity<GymFeedback>().Navigation(f => f.User).AutoInclude();
     }
 }
