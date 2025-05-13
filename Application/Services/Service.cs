@@ -46,7 +46,7 @@ public class Service<TReadDto, TCreateDto, TUpdateDto, TEntity> : IService<TRead
         await _repository.UpdateAsync(id, entity);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(Guid id)
     {
        await _repository.DeleteAsync(id);
     }
