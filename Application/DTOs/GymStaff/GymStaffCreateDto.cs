@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.DTOs;
+namespace Application.DTOs.GymStaff;
 
-public class CreateStaffDto
+public class GymStaffCreateDto
 {
     public required string Login { get; set; }
     public required string Password { get; set; }
