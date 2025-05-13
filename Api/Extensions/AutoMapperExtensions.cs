@@ -17,7 +17,9 @@ public static class AutoMapperExtensions
             typeof(SleepProfile),
             typeof(WaterIntakeLogProfile),
             typeof(GymProfile),
-            typeof(MembershipProfile)
+            typeof(MembershipProfile),
+            typeof(AdminProfile),
+            typeof(TrainerProfile)
         );
     }
 }
