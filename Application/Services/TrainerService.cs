@@ -120,10 +120,47 @@ public class TrainerService: ITrainerService
         var trainer = await _unitOfWork.Trainers.GetByIdAsync(dto.Id);
         if (trainer is null)
             throw new KeyNotFoundException();
+        
+        if (!string.IsNullOrWhiteSpace(dto.Login) && dto.Login != trainer.User.UserName)
+        {
+            var existingUser = await _userManager.FindByNameAsync(dto.Login);
+            if (existingUser != null)
+                throw new UserAlreadyExistsException(dto.Login);
+
+            trainer.User.UserName = dto.Login;
+            trainer.User.NormalizedUserName = dto.Login.ToUpperInvariant();
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(trainer.User);
+            var changePassResult = await _userManager.ResetPasswordAsync(trainer.User, token, dto.NewPassword);
+            if (!changePassResult.Succeeded)
+            {
+                var errors = string.Join("; ", changePassResult.Errors.Select(e => e.Description));
+                throw new InvalidPasswordException(errors);
+            }
+        }
+        
+        if (!string.IsNullOrWhiteSpace(dto.PhoneNumber) && dto.PhoneNumber != trainer.User.PhoneNumber)
+        {
+            var token = await _userManager.GenerateChangePhoneNumberTokenAsync(trainer.User, dto.PhoneNumber);
+            var phoneResult = await _userManager.ChangePhoneNumberAsync(trainer.User, dto.PhoneNumber, token);
+            if (!phoneResult.Succeeded)
+            {
+                var errors = string.Join("; ", phoneResult.Errors.Select(e => e.Description));
+                throw new Exception($"Failed to update phone number: {errors}");
+            }
+        }
 
         _mapper.Map(dto, trainer.User);
 
-        await _userManager.UpdateAsync(trainer.User);
+        var updateResult = await _userManager.UpdateAsync(trainer.User);
+        if (!updateResult.Succeeded)
+        {
+            var errors = string.Join("; ", updateResult.Errors.Select(e => e.Description));
+            throw new Exception($"Failed to update user: {errors}");
+        }
     }
 
     public async Task UpdateTrainerWithImageAsync(GymStaffUpdateDto dto, IFormFile profileImage)

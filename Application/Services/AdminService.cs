@@ -7,7 +7,6 @@ using Domain.Constants;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
@@ -108,9 +107,46 @@ public class AdminService : IAdminService
         if (admin is null)
             throw new KeyNotFoundException();
 
+        if (!string.IsNullOrWhiteSpace(dto.Login) && dto.Login != admin.User.UserName)
+        {
+            var existingUser = await _userManager.FindByNameAsync(dto.Login);
+            if (existingUser != null)
+                throw new UserAlreadyExistsException(dto.Login);
+
+            admin.User.UserName = dto.Login;
+            admin.User.NormalizedUserName = dto.Login.ToUpperInvariant();
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(admin.User);
+            var changePassResult = await _userManager.ResetPasswordAsync(admin.User, token, dto.NewPassword);
+            if (!changePassResult.Succeeded)
+            {
+                var errors = string.Join("; ", changePassResult.Errors.Select(e => e.Description));
+                throw new InvalidPasswordException(errors);
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.PhoneNumber) && dto.PhoneNumber != admin.User.PhoneNumber)
+        {
+            var token = await _userManager.GenerateChangePhoneNumberTokenAsync(admin.User, dto.PhoneNumber);
+            var phoneResult = await _userManager.ChangePhoneNumberAsync(admin.User, dto.PhoneNumber, token);
+            if (!phoneResult.Succeeded)
+            {
+                var errors = string.Join("; ", phoneResult.Errors.Select(e => e.Description));
+                throw new Exception($"Failed to update phone number: {errors}");
+            }
+        }
+
         _mapper.Map(dto, admin.User);
 
-        await _userManager.UpdateAsync(admin.User);
+        var updateResult = await _userManager.UpdateAsync(admin.User);
+        if (!updateResult.Succeeded)
+        {
+            var errors = string.Join("; ", updateResult.Errors.Select(e => e.Description));
+            throw new Exception($"Failed to update user: {errors}");
+        }
     }
 
     public async Task DeleteAdminByIdAsync(Guid id)
