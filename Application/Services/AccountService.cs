@@ -56,10 +56,10 @@ public class AccountService : IAccountService
 
     public async Task<User?> LoginAsync(LoginRequest loginRequest)
     {
-        var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+        var user = await _userManager.FindByNameAsync(loginRequest.Login);
         if (user is null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
         {
-            throw new LoginFailedException(loginRequest.Email);
+            throw new LoginFailedException(loginRequest.Login);
         }
         
         await WriteTokensAsync(user);
