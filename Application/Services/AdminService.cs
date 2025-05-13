@@ -29,13 +29,31 @@ public class AdminService : IAdminService
     public async Task<IEnumerable<GymStaffReadDto>> GetAdminsByGymIdAsync(Guid gymId)
     {
         var admins = await _unitOfWork.Admins.GetAdminsByGymIdAsync(gymId);
-        return _mapper.Map<IEnumerable<GymStaffReadDto>>(admins);
+
+        return admins.Select(a => new GymStaffReadDto
+        {
+            Id = a.UserId,
+            GymId = a.GymId,
+            FirstName = a.User.FirstName,
+            LastName = a.User.LastName,
+            Login = a.User.UserName ?? string.Empty,
+            PhoneNumber = a.User.PhoneNumber ?? string.Empty,
+        });
     }
 
     public async Task<GymStaffReadDto> GetAdminByIdAsync(Guid id)
     {
         var admin = await _unitOfWork.Admins.GetByIdAsync(id);
-        return _mapper.Map<GymStaffReadDto>(admin);
+        
+        return new GymStaffReadDto
+        {
+            Id = admin.UserId,
+            GymId = admin.GymId,
+            FirstName = admin.User.FirstName,
+            LastName = admin.User.LastName,
+            Login = admin.User.UserName ?? string.Empty,
+            PhoneNumber = admin.User.PhoneNumber ?? string.Empty,
+        };
     }
 
     public async Task<Guid> CreateAdminAsync(GymStaffCreateDto dto)
@@ -52,14 +70,14 @@ public class AdminService : IAdminService
             throw new UserAlreadyExistsException(dto.Login);
         }
 
-        // var user = new User
-        // {
-        //     UserName = dto.Login,
-        //     PhoneNumber = dto.PhoneNumber,
-        //     FirstName = dto.FirstName,
-        //     LastName = dto.LastName,
-        // };
-        var user = _mapper.Map<User>(dto);
+        var user = new User
+        {
+            UserName = dto.Login,
+            PhoneNumber = dto.PhoneNumber,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+        };
+        
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
         var result = await _userManager.CreateAsync(user, dto.Password);
 
@@ -70,13 +88,13 @@ public class AdminService : IAdminService
 
         await _userManager.AddToRoleAsync(user, IdentityRoleConstants.Admin);
 
-        // var adminProfile = new Admin
-        // {
-        //     UserId = user.Id,
-        //     User = user,
-        //     GymId = dto.GymId,
-        // };
-        var adminProfile = _mapper.Map<Admin>(dto);
+        var adminProfile = new Admin
+        {
+            UserId = user.Id,
+            User = user,
+            GymId = dto.GymId,
+        };
+        
         user.AdminProfile = adminProfile;
         
         await _unitOfWork.Admins.AddAsync(adminProfile);

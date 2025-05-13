@@ -31,13 +31,33 @@ public class TrainerService: ITrainerService
     public async Task<IEnumerable<GymStaffReadDto>> GetTrainersByGymIdAsync(Guid gymId)
     {
         var trainers = await _unitOfWork.Trainers.GetTrainersByGymIdAsync(gymId);
-        return _mapper.Map<IEnumerable<GymStaffReadDto>>(trainers);
+        
+        return trainers.Select(t => new GymStaffReadDto
+        {
+            Id = t.UserId,
+            GymId = t.GymId,
+            FirstName = t.User.FirstName,
+            LastName = t.User.LastName,
+            Login = t.User.UserName ?? string.Empty,
+            PhoneNumber = t.User.PhoneNumber ?? string.Empty,
+            ProfileImageUrl = t.User.PictureUrl ?? string.Empty,
+        });
     }
 
     public async Task<GymStaffReadDto> GetTrainerByIdAsync(Guid id)
     {
         var trainer = await _unitOfWork.Trainers.GetByIdAsync(id);
-        return _mapper.Map<GymStaffReadDto>(trainer);
+
+        return new GymStaffReadDto
+        {
+            Id = trainer.UserId,
+            GymId = trainer.GymId,
+            FirstName = trainer.User.FirstName,
+            LastName = trainer.User.LastName,
+            Login = trainer.User.UserName ?? string.Empty,
+            PhoneNumber = trainer.User.PhoneNumber ?? string.Empty,
+            ProfileImageUrl = trainer.User.PictureUrl ?? string.Empty,
+        };
     }
 
     public async Task<Guid> CreateTrainerAsync(GymStaffCreateDto dto, IFormFile profileImage)
@@ -54,14 +74,14 @@ public class TrainerService: ITrainerService
             throw new UserAlreadyExistsException(dto.Login);
         }
         
-        // var user = new User
-        // {
-        //     UserName = dto.Login,
-        //     PhoneNumber = dto.PhoneNumber,
-        //     FirstName = dto.FirstName,
-        //     LastName = dto.LastName,
-        // };
-        var user = _mapper.Map<User>(dto);
+        var user = new User
+        {
+            UserName = dto.Login,
+            PhoneNumber = dto.PhoneNumber,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+        };
+        
         user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, dto.Password);
         
         
@@ -74,14 +94,14 @@ public class TrainerService: ITrainerService
 
         await _userManager.AddToRoleAsync(user, IdentityRoleConstants.Trainer);
 
-        // var trainerProfile = new Trainer
-        // {
-        //     Id = Guid.NewGuid(),
-        //     UserId = user.Id,
-        //     User = user,
-        //     GymId = dto.GymId,
-        // };
-        var trainerProfile = _mapper.Map<Trainer>(dto);
+        var trainerProfile = new Trainer
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            User = user,
+            GymId = dto.GymId,
+        };
+        
         user.TrainerProfile = trainerProfile;
         
         if (profileImage is not null)
