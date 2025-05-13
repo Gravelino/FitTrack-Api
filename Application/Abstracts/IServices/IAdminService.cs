@@ -10,4 +10,5 @@ public interface IAdminService
     Task<Guid> CreateAdminAsync(GymStaffCreateDto dto);
     Task UpdateAdminAsync(GymStaffUpdateDto dto);
     Task DeleteAdminByIdAsync(Guid id);
+    Task<IEnumerable<GymStaffReadDto>> GetAdminsByOwnerIdAsync(Guid ownerId);
 }

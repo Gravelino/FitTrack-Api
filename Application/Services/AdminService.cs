@@ -118,4 +118,19 @@ public class AdminService : IAdminService
         var existingAdmin = await _unitOfWork.Admins.GetByIdAsync(id);
         await _unitOfWork.Admins.DeleteAsync(existingAdmin);
     }
+
+    public async Task<IEnumerable<GymStaffReadDto>> GetAdminsByOwnerIdAsync(Guid ownerId)
+    {
+        var admins = await _unitOfWork.Admins.GetAdminsByOwnerIdAsync(ownerId);
+        
+        return admins.Select(a => new GymStaffReadDto
+        {
+            Id = a.UserId,
+            GymId = a.GymId,
+            FirstName = a.User.FirstName,
+            LastName = a.User.LastName,
+            Login = a.User.UserName ?? string.Empty,
+            PhoneNumber = a.User.PhoneNumber ?? string.Empty,
+        });
+    }
 }
