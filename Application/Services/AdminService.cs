@@ -139,7 +139,8 @@ public class AdminService : IAdminService
             }
         }
 
-        _mapper.Map(dto, admin.User);
+        if(!string.IsNullOrWhiteSpace(dto.FirstName)) admin.User.FirstName = dto.FirstName;
+        if(!string.IsNullOrWhiteSpace(dto.LastName)) admin.User.LastName = dto.LastName;
 
         var updateResult = await _userManager.UpdateAsync(admin.User);
         if (!updateResult.Succeeded)

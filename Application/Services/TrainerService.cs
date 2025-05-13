@@ -153,7 +153,8 @@ public class TrainerService: ITrainerService
             }
         }
 
-        _mapper.Map(dto, trainer.User);
+        if(!string.IsNullOrWhiteSpace(dto.FirstName)) trainer.User.FirstName = dto.FirstName;
+        if(!string.IsNullOrWhiteSpace(dto.LastName)) trainer.User.LastName = dto.LastName;
 
         var updateResult = await _userManager.UpdateAsync(trainer.User);
         if (!updateResult.Succeeded)
