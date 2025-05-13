@@ -15,7 +15,9 @@ public static class IdentityExtensions
             options.Password.RequireUppercase = true;
             options.Password.RequireNonAlphanumeric = true;
             options.Password.RequiredLength = 8;
-            options.User.RequireUniqueEmail = true;
+            options.User.RequireUniqueEmail = false;
+            options.User.AllowedUserNameCharacters = null;
+            options.SignIn.RequireConfirmedEmail = false;
         }).AddEntityFrameworkStores<FitTrackDbContext>();
     }
 }
