@@ -51,8 +51,8 @@ public class AdminController: ControllerBase
 
         try
         {
-            await _adminService.CreateAdminAsync(dto);
-            return Ok();
+            var id = await _adminService.CreateAdminAsync(dto);
+            return Ok(new {Id = id});
         }
         catch (Exception ex)
         {
@@ -82,5 +82,16 @@ public class AdminController: ControllerBase
     {
         await _adminService.DeleteAdminByIdAsync(id);
         return NoContent();
+    }
+    
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    [HttpGet("get-by-ownerId/{ownerId:guid}")]
+    public async Task<ActionResult<IEnumerable<GymStaffReadDto>>> GetAdminsByOwnerId(Guid ownerId)
+    {
+        var admins = await _adminService.GetAdminsByOwnerIdAsync(ownerId);
+        if(!admins.Any())
+            return NotFound();
+        
+        return Ok(admins);
     }
 }
