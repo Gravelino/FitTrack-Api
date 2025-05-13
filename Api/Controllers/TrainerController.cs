@@ -51,8 +51,8 @@ public class TrainerController: ControllerBase
 
         try
         {
-            await _trainerService.CreateTrainerAsync(dto, profileImage);
-            return Ok();
+            var id = await _trainerService.CreateTrainerAsync(dto, profileImage);
+            return Ok(new {Id = id});
         }
         catch (Exception ex)
         {
