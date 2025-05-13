@@ -33,6 +33,7 @@ public class GlobalExceptionsHandler : IExceptionHandler
             UserAlreadyExistsException => (HttpStatusCode.Conflict, exception.Message),
             RegistrationFailedException => (HttpStatusCode.BadRequest, exception.Message),
             RefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
+            InvalidPasswordException => (HttpStatusCode.BadRequest, exception.Message),
             _ => (HttpStatusCode.InternalServerError, $"An unexpected error has occurred: {exception.Message}.")
         };
     }
