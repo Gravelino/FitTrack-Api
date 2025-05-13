@@ -71,7 +71,7 @@ public class ProductsController: Controller<ProductReadDto, ProductCreateDto, Pr
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("update-good/{id:guid}")]
-    public async Task<IActionResult> UpdateGood([FromForm] Guid id, [FromForm] ProductUpdateDto dto, [FromForm] IFormFile file)
+    public async Task<IActionResult> UpdateGood(Guid id, [FromForm] ProductUpdateDto dto, [FromForm] IFormFile file)
     {
         if(id != dto.Id)
             return BadRequest();

@@ -79,7 +79,7 @@ public class TrainerController: ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("update-with-image/{id:guid}")]
-    public async Task<IActionResult> UpdateTrainer([FromForm] Guid id, [FromForm] GymStaffUpdateDto dto,
+    public async Task<IActionResult> UpdateTrainer(Guid id, [FromForm] GymStaffUpdateDto dto,
         [FromForm] IFormFile profileImage)
     {
         if(id != dto.Id)
