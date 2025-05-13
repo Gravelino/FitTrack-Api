@@ -52,4 +52,13 @@ public class AdminRepository : IAdminRepository
             .Where(a => a.GymId == gymId)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Admin>> GetAdminsByOwnerIdAsync(Guid ownerId)
+    {
+        return await _context.Admins
+            .Include(a => a.User)
+            .Include(a => a.Gym)
+            .Where(a => a.Gym.OwnerId == ownerId)
+            .ToListAsync();
+    }
 }

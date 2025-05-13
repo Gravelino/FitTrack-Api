@@ -10,4 +10,5 @@ public interface IAdminRepository
     Task UpdateAsync(Admin admin);
     Task DeleteAsync(Admin admin);
     Task<IEnumerable<Admin>> GetAdminsByGymIdAsync(Guid gymId);
+    Task<IEnumerable<Admin>> GetAdminsByOwnerIdAsync(Guid ownerId);
 }
