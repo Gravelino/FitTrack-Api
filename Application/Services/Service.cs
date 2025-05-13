@@ -17,7 +17,6 @@ public class Service<TReadDto, TCreateDto, TUpdateDto, TEntity> : IService<TRead
         _mapper = mapper;
     }
 
-
     public async Task<IEnumerable<TReadDto>> GetAllAsync()
     {
         var entities = await _repository.GetAllAsync();
