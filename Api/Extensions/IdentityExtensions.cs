@@ -18,6 +18,7 @@ public static class IdentityExtensions
             options.User.RequireUniqueEmail = false;
             options.User.AllowedUserNameCharacters = null;
             options.SignIn.RequireConfirmedEmail = false;
-        }).AddEntityFrameworkStores<FitTrackDbContext>();
+        }).AddEntityFrameworkStores<FitTrackDbContext>()
+        .AddDefaultTokenProviders();
     }
 }
