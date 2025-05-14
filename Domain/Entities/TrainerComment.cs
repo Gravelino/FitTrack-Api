@@ -6,8 +6,8 @@ public class TrainerComment: IEntity
 {
     public Guid Id { get; set; }
     public string Message { get; set; }
-    public DateTime Date { get; set; } = DateTime.UtcNow;
-    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime MealDate { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     
