@@ -33,6 +33,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IGymFeedbackService, GymFeedbackService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ITrainerCommentService, TrainerCommentService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
