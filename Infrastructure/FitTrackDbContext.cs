@@ -37,6 +37,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<Membership> Memberships { get; set; }
     public DbSet<UserMembership> UserMemberships { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<TrainingTime> TrainingTimes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
