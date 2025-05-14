@@ -33,8 +33,8 @@ public class ProductsController: Controller<ProductReadDto, ProductCreateDto, Pr
     
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("get-by-gymId/{type}")]
-    public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetByGymIdAndType(Guid gymId, string type)
+    [HttpGet("get-by-gymId/{gymId:guid}")]
+    public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetByGymIdAndType(Guid gymId,[FromQuery] string type)
     {
         var products = await _service.GetProductsByGymId(gymId, type);
         if(!products.Any())
