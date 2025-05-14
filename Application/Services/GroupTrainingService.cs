@@ -34,4 +34,9 @@ public class GroupTrainingService: Service<GroupTrainingReadDto, GroupTrainingCr
         var users = await _repository.GetGroupTrainingUsersByTrainingIdAsync(trainingId);
         return _mapper.Map<IEnumerable<CurrentUserDto>>(users);   
     }
+
+    public async Task AssignUserToTrainingAsync(Guid userId, Guid trainingId)
+    {
+        await _repository.AssignUserToTrainingAsync(userId, trainingId);
+    }
 }
