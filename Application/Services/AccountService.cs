@@ -64,6 +64,8 @@ public class AccountService : IAccountService
         
         await WriteTokensAsyncLogin(user);
         
+        var roles = await _userManager.GetRolesAsync(user);
+        
         return new CurrentUserDto
         {
             Id = user.Id,
@@ -71,6 +73,7 @@ public class AccountService : IAccountService
             FirstName = user.FirstName,
             LastName = user.LastName,
             PictureUrl = user.PictureUrl,
+            Roles = roles
         };
     }
 
