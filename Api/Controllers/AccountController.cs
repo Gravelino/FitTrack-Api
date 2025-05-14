@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Requests;
 using Google.Apis.Auth.OAuth2.Requests;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -160,6 +161,15 @@ public class AccountController: ControllerBase
     {
         await _accountService.DeleteByEmail(deleteByEmailRequest);
         await _signInManager.SignOutAsync();
+        return NoContent();
+    }
+
+    [HttpPost("logout")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return NoContent();
     }
 }
