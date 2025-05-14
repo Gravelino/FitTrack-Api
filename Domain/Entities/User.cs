@@ -36,7 +36,6 @@ public class User : IdentityUser<Guid>, IEntity
    
     //public ICollection<Purchase>? Purchases { get; set; }
     public ICollection<UserMembership> UserMemberships { get; set; }
-    public ICollection<TrainingTime> TrainingTimes { get; set; }
 
     public static User Create(string email, string firstName, string lastName)
     {
