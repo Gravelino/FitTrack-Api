@@ -13,7 +13,7 @@ public class TrainerCommentRepository: Repository<TrainerComment>, ITrainerComme
     public async Task<IEnumerable<TrainerComment>> GetTrainerCommentsByUserIdAndDate(Guid userId, DateTime date)
     {
         var comments = await _context.TrainerComments
-            .Where(c => c.UserId == userId && c.Date.Date == date.Date)
+            .Where(c => c.UserId == userId && c.MealDate.Date == date.Date)
             .ToListAsync();
         
         return comments;
@@ -22,7 +22,7 @@ public class TrainerCommentRepository: Repository<TrainerComment>, ITrainerComme
     public async Task<IEnumerable<TrainerComment>> GetTrainerCommentsByTrainerIdAndDate(Guid trainerId, DateTime date)
     {
         var comments = await _context.TrainerComments
-            .Where(c => c.TrainerId == trainerId && c.Date.Date == date.Date)
+            .Where(c => c.TrainerId == trainerId && c.MealDate.Date == date.Date)
             .ToListAsync();
         
         return comments;
