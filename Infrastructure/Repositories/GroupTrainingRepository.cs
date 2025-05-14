@@ -1,4 +1,5 @@
 using Application.Abstracts.IRepositories;
+using Application.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,5 +27,14 @@ public class GroupTrainingRepository: Repository<GroupTraining>, IGroupTrainingR
             .ToListAsync();
         
         return trainings;
+    }
+
+    public async Task<IEnumerable<User>> GetGroupTrainingUsersByTrainingIdAsync(Guid trainingId)
+    {
+        var training = await _context.GroupTrainings
+            .Include(t => t.Users)
+            .FirstOrDefaultAsync(t => t.Id == trainingId);
+    
+        return training?.Users ?? Enumerable.Empty<User>();
     }
 }
