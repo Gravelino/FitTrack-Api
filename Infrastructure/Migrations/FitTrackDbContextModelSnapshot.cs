@@ -376,22 +376,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Trainer", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("GymId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.HasIndex("GymId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Trainers");
                 });
