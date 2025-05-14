@@ -363,7 +363,12 @@ public class AccountService : IAccountService
         if (string.IsNullOrEmpty(username))
             throw new UnauthorizedAccessException();
         
-        var entity = await _userManager.FindByIdAsync(username);
+        var entity = await _userManager.Users
+            .Include(u => u.AdminProfile)
+            .Include(u => u.TrainerProfile)
+            .Where(u => u.Id.ToString() == username)
+            .FirstOrDefaultAsync();
+        
         if (entity is null)
             throw new UnauthorizedAccessException();
         
