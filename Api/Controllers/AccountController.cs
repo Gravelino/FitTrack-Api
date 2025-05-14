@@ -134,6 +134,14 @@ public class AccountController: ControllerBase
          var user = await _accountService.GetCurrentUserAsync(User);
          return Ok(user);    
      }
+     
+     [HttpGet("staff/me")]
+     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+     public async Task<IActionResult> GetCurrentGymStaff()
+     {
+         var user = await _accountService.GetCurrentUserAsyncLogin(User);
+         return Ok(user);    
+     }
 
     [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

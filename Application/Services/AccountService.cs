@@ -54,7 +54,7 @@ public class AccountService : IAccountService
         await _userManager.AddToRoleAsync(user, GetIdentityRoleName(registerRequest.Role));
     }
 
-    public async Task<User?> LoginAsync(LoginRequest loginRequest)
+    public async Task<CurrentUserDto?> LoginAsync(LoginRequest loginRequest)
     {
         var user = await _userManager.FindByNameAsync(loginRequest.Login);
         if (user is null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
@@ -64,7 +64,14 @@ public class AccountService : IAccountService
         
         await WriteTokensAsyncLogin(user);
         
-        return user;
+        return new CurrentUserDto
+        {
+            Id = user.Id,
+            Login = user.UserName!,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            PictureUrl = user.PictureUrl,
+        };
     }
 
     public async Task<(string, string, Guid?)> LoginMobileAsync(LoginMobileRequest loginRequest)
@@ -304,7 +311,30 @@ public class AccountService : IAccountService
         return new CurrentUserDto
         {
             Id = entity.Id,
-            Email = entity.Email!,
+            Login = entity.Email!,
+            FirstName = entity.FirstName!,
+            LastName = entity.LastName!,
+            PictureUrl = entity.PictureUrl,
+            Roles = roles
+        };
+    }
+    
+    public async Task<CurrentUserDto> GetCurrentUserAsyncLogin(ClaimsPrincipal user)
+    {
+        var username = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(username))
+            throw new UnauthorizedAccessException();
+        
+        var entity = await _userManager.FindByIdAsync(username);
+        if (entity is null)
+            throw new UnauthorizedAccessException();
+        
+        var roles = await _userManager.GetRolesAsync(entity);
+
+        return new CurrentUserDto
+        {
+            Id = entity.Id,
+            Login = entity.UserName!,
             FirstName = entity.FirstName!,
             LastName = entity.LastName!,
             PictureUrl = entity.PictureUrl,
