@@ -1,4 +1,5 @@
 using Application.Abstracts.IServices;
+using Application.DTOs;
 using Application.DTOs.GymStaff;
 using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -97,5 +98,18 @@ public class TrainerController: ControllerBase
     {
         await _trainerService.DeleteTrainerByIdAsync(id);
         return NoContent();
+    }
+    
+    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("get-clients/{trainerId:guid}")]
+    public async Task<ActionResult<IEnumerable<CurrentUserDto>>> GetTrainerClients(Guid trainerId)
+    {
+        var clients = await _trainerService.GetTrainerClientsAsync(trainerId);
+        if(!clients.Any())
+            return NotFound();
+        
+        return Ok(clients);
     }
 }
