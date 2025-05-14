@@ -18,11 +18,13 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly IGymService _gymService;
+    private readonly ITrainerService _trainerService;
 
-    public UserController(UserManager<User> userManager, IGymService gymService)
+    public UserController(UserManager<User> userManager, IGymService gymService, ITrainerService trainerService)
     {
         _userManager = userManager;
         _gymService = gymService;
+        _trainerService = trainerService;
     }
     
     [Authorize(Roles = IdentityRoleConstants.User)]
@@ -68,5 +70,23 @@ public class UserController : ControllerBase
             return NotFound();
         
         return Ok(gym);
+    }
+    
+    [HttpGet("get-trainer-by-userId/{userId:guid}")]
+    public async Task<ActionResult<GymReadDto>> GetTrainerByUserId(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return NotFound();
+        
+        var trainerId = user.TrainerId;
+        if (trainerId is null)
+            return NotFound();
+        
+        var trainer = await _trainerService.GetTrainerByIdAsync((Guid)trainerId);
+        if(trainer is null)
+            return NotFound();
+        
+        return Ok(trainer);
     }
 }
