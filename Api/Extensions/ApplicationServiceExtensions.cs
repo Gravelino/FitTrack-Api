@@ -34,6 +34,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IGymFeedbackService, GymFeedbackService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ITrainerCommentService, TrainerCommentService>();
+        services.AddScoped<IGroupTrainingService, GroupTrainingService>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
