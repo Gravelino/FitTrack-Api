@@ -40,7 +40,7 @@ public class TrainerService: ITrainerService
             LastName = t.User.LastName,
             Login = t.User.UserName ?? string.Empty,
             PhoneNumber = t.User.PhoneNumber ?? string.Empty,
-            ProfileImageUrl = t.User.PictureUrl ?? string.Empty,
+            ProfileImageUrl = t.User.PictureUrl is not null ? _s3Service.GeneratePreSignedUrl(t.User.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
         });
     }
 
@@ -56,7 +56,7 @@ public class TrainerService: ITrainerService
             LastName = trainer.User.LastName,
             Login = trainer.User.UserName ?? string.Empty,
             PhoneNumber = trainer.User.PhoneNumber ?? string.Empty,
-            ProfileImageUrl = trainer.User.PictureUrl ?? string.Empty,
+            ProfileImageUrl = trainer.User.PictureUrl is not null ? _s3Service.GeneratePreSignedUrl(trainer.User.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
         };
     }
 
@@ -96,7 +96,6 @@ public class TrainerService: ITrainerService
 
         var trainerProfile = new Trainer
         {
-            Id = Guid.NewGuid(),
             UserId = user.Id,
             User = user,
             GymId = dto.GymId,
@@ -106,13 +105,13 @@ public class TrainerService: ITrainerService
         
         if (profileImage is not null)
         {
-            user.PictureUrl = await _s3Service.UploadFileAsync(profileImage, "trainers", trainerProfile.Id);
+            user.PictureUrl = await _s3Service.UploadFileAsync(profileImage, "trainers", trainerProfile.UserId);
             await _userManager.UpdateAsync(user);
         }
         
         await _unitOfWork.Trainers.AddAsync(trainerProfile);
         
-        return trainerProfile.Id;
+        return trainerProfile.UserId;
     }
 
     public async Task UpdateTrainerAsync(GymStaffUpdateDto dto)
@@ -174,7 +173,7 @@ public class TrainerService: ITrainerService
 
         if (profileImage is not null)
         {
-            trainer.User.PictureUrl = await _s3Service.UploadFileAsync(profileImage, "trainers", trainer.Id);
+            trainer.User.PictureUrl = await _s3Service.UploadFileAsync(profileImage, "trainers", trainer.UserId);
         }
         
         await _userManager.UpdateAsync(trainer.User);

@@ -17,7 +17,7 @@ public class TrainerRepository : ITrainerRepository
     {
         return await _context.Trainers
             .Include(t => t.User)
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t => t.UserId == id);
     }
 
     public async Task<IEnumerable<Trainer>> GetAllAsync()

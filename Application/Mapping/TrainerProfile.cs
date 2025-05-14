@@ -26,7 +26,7 @@ public class TrainerProfile: Profile
 
         CreateMap<Trainer, GymStaffReadDto>()
             .ForMember(dest => dest.Id, opt =>
-                opt.MapFrom(src => src.Id))
+                opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.Login, opt =>
                 opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.FirstName, opt =>

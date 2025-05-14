@@ -21,15 +21,17 @@ public class AccountService : IAccountService
     private readonly UserManager<User> _userManager;
     private readonly IUserRepository _userRepository;
     private readonly IOwnerService _ownerService;
+    private readonly IS3Service _s3Service;
     private readonly string _googleClientId;
 
     public AccountService(IAuthTokenProcessor authTokenProcessor, UserManager<User> userManager,
-        IUserRepository userRepository, IConfiguration config, IOwnerService ownerService)
+        IUserRepository userRepository, IConfiguration config, IOwnerService ownerService, IS3Service s3Service)
     {
         _authTokenProcessor = authTokenProcessor;
         _userManager = userManager;
         _userRepository = userRepository;
         _ownerService = ownerService;
+        _s3Service = s3Service;
         _googleClientId = config["Authentication:Google:ClientId"]!;
     }
 
@@ -78,7 +80,7 @@ public class AccountService : IAccountService
             Login = user.UserName!,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            PictureUrl = user.PictureUrl,
+            PictureUrl = user.PictureUrl is not null ? _s3Service.GeneratePreSignedUrl(user.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
             Roles = roles,
         };
         
@@ -367,15 +369,20 @@ public class AccountService : IAccountService
         
         var roles = await _userManager.GetRolesAsync(entity);
 
-        return new CurrentUserDto
+        var userDto = new CurrentUserDto
         {
             Id = entity.Id,
             Login = entity.UserName!,
-            FirstName = entity.FirstName!,
-            LastName = entity.LastName!,
-            PictureUrl = entity.PictureUrl,
-            Roles = roles
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            PictureUrl = entity.PictureUrl is not null ?  _s3Service.GeneratePreSignedUrl(entity.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
+            Roles = roles,
         };
+        
+        if(entity.AdminProfile is not null) userDto.GymId = entity.AdminProfile.GymId;
+        if(entity.TrainerProfile is not null) userDto.GymId = entity.TrainerProfile.GymId;
+        
+        return userDto;
     }
 
     public async Task DeleteAsync(ClaimsPrincipal user)

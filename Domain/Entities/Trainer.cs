@@ -3,10 +3,10 @@ using Application.Abstracts;
 
 namespace Domain.Entities;
 
-public class Trainer : IEntity
+public class Trainer //: IEntity
 {
-    public Guid Id { get; set; }
-    
+    //public Guid Id { get; set; }
+    [Key]
     public Guid UserId { get; set; }
     public User User { get; set; }
     
