@@ -34,6 +34,8 @@ public class GlobalExceptionsHandler : IExceptionHandler
             RegistrationFailedException => (HttpStatusCode.BadRequest, exception.Message),
             RefreshTokenException => (HttpStatusCode.Unauthorized, exception.Message),
             InvalidPasswordException => (HttpStatusCode.BadRequest, exception.Message),
+            BusinessException => (HttpStatusCode.BadRequest, exception.Message),
+            NotFoundException => (HttpStatusCode.NotFound, exception.Message),
             _ => (HttpStatusCode.InternalServerError, $"An unexpected error has occurred: {exception.Message}.")
         };
     }
