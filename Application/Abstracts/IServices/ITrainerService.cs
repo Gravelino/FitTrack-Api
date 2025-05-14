@@ -1,3 +1,4 @@
+using Application.DTOs;
 using Application.DTOs.GymStaff;
 using Microsoft.AspNetCore.Http;
 
@@ -11,4 +12,5 @@ public interface ITrainerService
     Task UpdateTrainerAsync(GymStaffUpdateDto dto);
     Task UpdateTrainerWithImageAsync(GymStaffUpdateDto dto, IFormFile profileImage);
     Task DeleteTrainerByIdAsync(Guid id);
+    Task<IEnumerable<CurrentUserDto>> GetTrainerClientsAsync(Guid trainerId);
 }

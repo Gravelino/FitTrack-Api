@@ -1,6 +1,7 @@
 using Application.Abstracts;
 using Application.Abstracts.IRepositories;
 using Application.Abstracts.IServices;
+using Application.DTOs;
 using Application.DTOs.GymStaff;
 using AutoMapper;
 using Domain.Constants;
@@ -183,5 +184,11 @@ public class TrainerService: ITrainerService
     {
         var existingTrainer = await _unitOfWork.Trainers.GetByIdAsync(id);
         await _unitOfWork.Trainers.DeleteAsync(existingTrainer);
+    }
+
+    public async Task<IEnumerable<CurrentUserDto>> GetTrainerClientsAsync(Guid trainerId)
+    {
+        var clients = await _unitOfWork.Trainers.GetClientsAsync(trainerId);
+        return _mapper.Map<IEnumerable<CurrentUserDto>>(clients);
     }
 }
