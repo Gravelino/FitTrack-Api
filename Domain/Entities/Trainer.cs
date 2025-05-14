@@ -16,4 +16,5 @@ public class Trainer : IEntity
     public ICollection<User> Customers { get; set; } = new List<User>();
     public ICollection<IndividualTraining> IndividualTrainings { get; set; }
     public ICollection<GroupTraining> GroupTrainings { get; set; }
+    public ICollection<TrainerComment> TrainerComments { get; set; }
 }

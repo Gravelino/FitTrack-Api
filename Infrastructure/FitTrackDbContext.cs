@@ -37,6 +37,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<Membership> Memberships { get; set; }
     public DbSet<UserMembership> UserMemberships { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<TrainerComment> TrainerComments { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -154,5 +155,21 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
             .HasForeignKey(um => um.MembershipId);
         
         builder.Entity<GymFeedback>().Navigation(f => f.User).AutoInclude();
+        
+        builder.Entity<TrainerComment>(entity =>
+            {
+                entity.HasOne(tc => tc.User)
+                    .WithMany(u => u.TrainerComments)
+                      .HasForeignKey(tc => tc.UserId)
+                      .OnDelete(DeleteBehavior.Restrict); 
+                
+                entity.HasOne(tc => tc.Trainer)
+                      .WithMany(t => t.TrainerComments)
+                      .HasForeignKey(tc => tc.TrainerId)
+                      .OnDelete(DeleteBehavior.Restrict); 
+                
+                entity.Navigation(tc => tc.Trainer).AutoInclude();
+                entity.Navigation(tc => tc.User).AutoInclude();
+            });
     }
 }
