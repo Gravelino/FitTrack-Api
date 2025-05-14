@@ -10,4 +10,5 @@ public interface ITrainerRepository
     Task UpdateAsync(Trainer trainer);
     Task DeleteAsync(Trainer trainer);
     Task<IEnumerable<Trainer>> GetTrainersByGymIdAsync(Guid gymId);
+    Task<IEnumerable<User>> GetClientsAsync(Guid trainerId);
 }

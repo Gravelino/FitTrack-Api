@@ -54,4 +54,13 @@ public class TrainerRepository : ITrainerRepository
         
         return trainers;
     }
+
+    public async Task<IEnumerable<User>> GetClientsAsync(Guid trainerId)
+    {
+        var clients = await _context.Users
+            .Where(u => u.TrainerId == trainerId)
+            .ToListAsync();
+        
+        return clients;
+    }
 }
