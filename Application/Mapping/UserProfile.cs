@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Application.Mapping.Resolvers;
 using AutoMapper;
 using Domain.Entities;
 
@@ -10,6 +11,8 @@ public class UserProfile: Profile
     {
         CreateMap<User, CurrentUserDto>()
             .ForMember(dest => dest.Login, opt =>
-                opt.MapFrom(src => src.Email));
+                opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.PictureUrl, opt =>
+                opt.MapFrom<UserImageResolver>());
     }
 }
