@@ -8,4 +8,5 @@ public class CurrentUserDto
     public string LastName { get; set; } = default!;
     public string? PictureUrl { get; set; }
     public IList<string> Roles { get; set; } = new List<string>();
+    public Guid? GymId { get; set; }
 }

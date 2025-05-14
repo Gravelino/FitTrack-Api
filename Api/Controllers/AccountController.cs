@@ -120,6 +120,14 @@ public class AccountController: ControllerBase
         await _accountService.RefreshTokenAsync(refreshToken);
         return Ok();
     }
+    
+    [HttpPost("refresh-token/staff")]
+    public async Task<IActionResult> RefreshTokenLogin()
+    {
+        var refreshToken = Request.Cookies["REFRESH_TOKEN"];
+        await _accountService.RefreshTokenAsyncLogin(refreshToken);
+        return Ok();
+    }
 
     [HttpPost("refresh-token/mobile")]
     public async Task<IActionResult> RefreshTokenMobile([FromBody] RefreshTokenRequest refreshTokenRequest)

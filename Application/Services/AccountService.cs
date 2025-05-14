@@ -10,6 +10,7 @@ using Domain.Exceptions;
 using Domain.Requests;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Services;
@@ -56,7 +57,12 @@ public class AccountService : IAccountService
 
     public async Task<CurrentUserDto?> LoginAsync(LoginRequest loginRequest)
     {
-        var user = await _userManager.FindByNameAsync(loginRequest.Login);
+        var user = await _userManager.Users
+            .Include(u => u.AdminProfile)
+            .Include(u => u.TrainerProfile)
+            .Where(u => u.UserName == loginRequest.Login)
+            .FirstOrDefaultAsync();
+        
         if (user is null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
         {
             throw new LoginFailedException(loginRequest.Login);
@@ -66,15 +72,20 @@ public class AccountService : IAccountService
         
         var roles = await _userManager.GetRolesAsync(user);
         
-        return new CurrentUserDto
+        var userDto = new CurrentUserDto
         {
             Id = user.Id,
             Login = user.UserName!,
             FirstName = user.FirstName,
             LastName = user.LastName,
             PictureUrl = user.PictureUrl,
-            Roles = roles
+            Roles = roles,
         };
+        
+        if(user.AdminProfile is not null) userDto.GymId = user.AdminProfile.GymId;
+        if(user.TrainerProfile is not null) userDto.GymId = user.TrainerProfile.GymId;
+        
+        return userDto;
     }
 
     public async Task<(string, string, Guid?)> LoginMobileAsync(LoginMobileRequest loginRequest)
@@ -133,6 +144,28 @@ public class AccountService : IAccountService
         }
         
         await WriteTokensAsync(user);
+    }
+    
+    public async Task RefreshTokenAsyncLogin(string? refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            throw new RefreshTokenException("Refresh token is missing.");
+        }
+        
+        var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
+
+        if (user is null)
+        {
+            throw new RefreshTokenException("Unable to retrieve user for refresh token.");
+        }
+
+        if (user.RefreshTokenExpiresAtUtc < DateTime.UtcNow)
+        {
+            throw new RefreshTokenException("Refresh token is expired.");
+        }
+        
+        await WriteTokensAsyncLogin(user);
     }
     
     public async Task<(string, string)> RefreshTokenMobileAsync(string? refreshToken)
