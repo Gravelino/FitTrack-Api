@@ -22,6 +22,19 @@ public class GroupTrainingController: Controller<GroupTrainingReadDto, GroupTrai
     }
 
     [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    public override async Task<ActionResult<Guid>> Create(GroupTrainingCreateDto dto) =>
+        await base.Create(dto);
+    
+    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    public override async Task<IActionResult> Update(Guid id, GroupTrainingUpdateDto dto) =>
+        await base.Update(id, dto);
+    
+    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    public override async Task<IActionResult> Delete(Guid id) =>
+        await base.Delete(id);
+
+    
+    [Authorize(Roles = IdentityRoleConstants.Trainer)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-by-trainerId-and-period/{trainerId:guid}")]
