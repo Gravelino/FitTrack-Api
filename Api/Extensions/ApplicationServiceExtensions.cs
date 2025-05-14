@@ -38,5 +38,6 @@ public static class ApplicationServiceExtensions
         
         services.AddScoped<MainImageUrlResolver>();
         services.AddScoped<ImagesResolver>();
+        services.AddScoped<ProductImageResolver>();
     }
 }
