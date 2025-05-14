@@ -62,7 +62,7 @@ public class AccountService : IAccountService
             throw new LoginFailedException(loginRequest.Login);
         }
         
-        await WriteTokensAsync(user);
+        await WriteTokensAsyncLogin(user);
         
         return user;
     }
@@ -256,6 +256,25 @@ public class AccountService : IAccountService
         var roles = await _userManager.GetRolesAsync(user);
         
         var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtToken(user, roles);
+        var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
+        
+        var refreshTokenExpirationDateInUtc = expirationDateInUtc.AddDays(7);
+        
+        user.RefreshToken = refreshTokenValue;
+        user.RefreshTokenExpiresAtUtc = refreshTokenExpirationDateInUtc;
+        
+        await _userManager.UpdateAsync(user);
+        
+        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", jwtToken, expirationDateInUtc);
+        _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", user.RefreshToken,
+            refreshTokenExpirationDateInUtc);
+    }
+    
+    private async Task WriteTokensAsyncLogin(User user)
+    {
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var (jwtToken, expirationDateInUtc) = _authTokenProcessor.GenerateJwtTokenByLogin(user, roles);
         var refreshTokenValue = _authTokenProcessor.GenerateRefreshToken();
         
         var refreshTokenExpirationDateInUtc = expirationDateInUtc.AddDays(7);
