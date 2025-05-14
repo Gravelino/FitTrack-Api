@@ -1,4 +1,5 @@
 using Application.DTOs.GymStaff;
+using Application.Mapping.Resolvers;
 using AutoMapper;
 using Domain.Entities;
 
@@ -16,13 +17,11 @@ public class TrainerProfile: Profile
             .ForMember(dest => dest.FirstName, opt =>
                 opt.MapFrom(src => src.FirstName))
             .ForMember(dest => dest.LastName, opt =>
-                opt.MapFrom(src => src.LastName))
-            .ForAllMembers(opt => opt.Ignore());
+                opt.MapFrom(src => src.LastName));
 
         CreateMap<GymStaffCreateDto, Trainer>()
             .ForMember(dest => dest.GymId, opt =>
-                opt.MapFrom(src => src.GymId))
-            .ForAllMembers(opt => opt.Ignore());
+                opt.MapFrom(src => src.GymId));
 
         CreateMap<Trainer, GymStaffReadDto>()
             .ForMember(dest => dest.Id, opt =>
@@ -38,8 +37,7 @@ public class TrainerProfile: Profile
             .ForMember(dest => dest.GymId, opt =>
                 opt.MapFrom(src => src.GymId))
             .ForMember(dest => dest.ProfileImageUrl, opt =>
-                opt.MapFrom(src => src.User.PictureUrl))
-            .ForAllMembers(opt => opt.Ignore());
+                opt.MapFrom<TrainerImageResolver>());
 
         CreateMap<GymStaffUpdateDto, User>()
             .ForMember(dest => dest.FirstName, opt =>
@@ -49,7 +47,6 @@ public class TrainerProfile: Profile
             .ForMember(dest => dest.PhoneNumber, opt =>
                 opt.MapFrom(src => src.PhoneNumber))
             .ForMember(dest => dest.UserName, opt =>
-                opt.MapFrom(src => src.Login))
-            .ForAllMembers(opt => opt.Ignore());
+                opt.MapFrom(src => src.Login));
     }
 }
