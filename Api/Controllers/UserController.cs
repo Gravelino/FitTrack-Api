@@ -1,7 +1,4 @@
-using Application.Abstracts;
 using Application.Abstracts.IServices;
-using Application.DTOs;
-using Application.DTOs.GroupTraining;
 using Application.DTOs.Gym;
 using Domain.Constants;
 using Domain.Entities;
@@ -9,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers;
 
