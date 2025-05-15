@@ -81,4 +81,16 @@ public class GroupTrainingController: Controller<GroupTrainingReadDto, GroupTrai
         await _service.AssignUserToTrainingAsync(userId, trainingId);
         return Ok();
     }
+    
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("user-history/{userId:guid}")]
+    public async Task<ActionResult<IEnumerable<GroupTrainingReadDto>>> GetUserGroupTrainingsHistoryAsync(Guid userId)
+    {
+        var groupTrainings = await _service.GetUserGroupTrainingsHistoryAsync(userId);
+        if(!groupTrainings.Any())
+            return NotFound();
+    
+        return Ok(groupTrainings);
+    }
 }
