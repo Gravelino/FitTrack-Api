@@ -1,6 +1,7 @@
 using Application.Abstracts;
 using Application.Abstracts.IServices;
 using Application.DTOs;
+using Application.DTOs.GroupTraining;
 using Application.DTOs.Gym;
 using Domain.Constants;
 using Domain.Entities;
@@ -8,12 +9,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers;
 
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = IdentityRoleConstants.User)]
 public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
@@ -27,7 +30,6 @@ public class UserController : ControllerBase
         _trainerService = trainerService;
     }
     
-    [Authorize(Roles = IdentityRoleConstants.User)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -54,6 +56,8 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-gym-by-userId/{userId:guid}")]
     public async Task<ActionResult<GymReadDto>> GetGymByUserId(Guid userId)
     {
@@ -72,6 +76,8 @@ public class UserController : ControllerBase
         return Ok(gym);
     }
     
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-trainer-by-userId/{userId:guid}")]
     public async Task<ActionResult<GymReadDto>> GetTrainerByUserId(Guid userId)
     {
