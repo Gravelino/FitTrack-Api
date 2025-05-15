@@ -11,4 +11,5 @@ public interface IGroupTrainingService: IService<GroupTrainingReadDto, GroupTrai
     Task<IEnumerable<GroupTrainingReadDto>> GetGroupTrainingsByGymIdAndPeriodAsync(Guid gymId, DateTime fromDate, DateTime toDate);
     Task<IEnumerable<CurrentUserDto>> GetGroupTrainingUsersByTrainingIdAsync(Guid trainingId);
     Task AssignUserToTrainingAsync(Guid userId, Guid trainingId);
+    Task<IEnumerable<GroupTrainingReadDto>> GetUserGroupTrainingsHistoryAsync(Guid userId);
 }
