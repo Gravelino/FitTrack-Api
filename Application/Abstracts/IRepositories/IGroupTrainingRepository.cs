@@ -8,4 +8,6 @@ public interface IGroupTrainingRepository: IRepository<GroupTraining>
     Task<IEnumerable<GroupTraining>> GetGroupTrainingsByGymIdAndPeriodAsync(Guid gymId, DateTime fromDate, DateTime toDate);
     Task<IEnumerable<User>> GetGroupTrainingUsersByTrainingIdAsync(Guid trainingId);
     Task AssignUserToTrainingAsync(Guid userId, Guid trainingId);
+    Task<IEnumerable<GroupTraining>> GetUserGroupTrainingsHistoryAsync(Guid userId);
+
 }

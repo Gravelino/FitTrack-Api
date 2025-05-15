@@ -70,4 +70,14 @@ public class GroupTrainingRepository: Repository<GroupTraining>, IGroupTrainingR
         
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<GroupTraining>> GetUserGroupTrainingsHistoryAsync(Guid userId)
+    {
+        var trainings = await _context.GroupTrainings
+            .Include(t => t.Users)
+            .Where(t => t.Users.Any(u => u.Id == userId))
+            .ToListAsync();
+        
+        return trainings;   
+    }
 }
