@@ -1,5 +1,4 @@
 using Application.Abstracts.IRepositories;
-using Application.DTOs;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +75,7 @@ public class GroupTrainingRepository: Repository<GroupTraining>, IGroupTrainingR
         var trainings = await _context.GroupTrainings
             .Include(t => t.Users)
             .Where(t => t.Users.Any(u => u.Id == userId))
+            .OrderByDescending(t => t.Date)
             .ToListAsync();
         
         return trainings;   
