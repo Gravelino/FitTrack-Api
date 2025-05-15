@@ -21,20 +21,20 @@ public class GroupTrainingController: Controller<GroupTrainingReadDto, GroupTrai
         _service = service;
     }
 
-    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [Authorize(Roles = IdentityRoleConstants.Admin)]
     public override async Task<ActionResult<Guid>> Create(GroupTrainingCreateDto dto) =>
         await base.Create(dto);
     
-    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [Authorize(Roles = IdentityRoleConstants.Admin)]
     public override async Task<IActionResult> Update(Guid id, GroupTrainingUpdateDto dto) =>
         await base.Update(id, dto);
     
-    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [Authorize(Roles = IdentityRoleConstants.Admin)]
     public override async Task<IActionResult> Delete(Guid id) =>
         await base.Delete(id);
 
     
-    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [Authorize(Roles = IdentityRoleConstants.Trainer + "," + IdentityRoleConstants.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-by-trainerId-and-period/{trainerId:guid}")]
@@ -62,7 +62,7 @@ public class GroupTrainingController: Controller<GroupTrainingReadDto, GroupTrai
         return Ok(groupTrainings);  
     }
 
-    [Authorize(Roles = IdentityRoleConstants.Trainer)]
+    [Authorize(Roles = IdentityRoleConstants.Trainer + "," + IdentityRoleConstants.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-users-by-trainingId/{trainingId:guid}")]
