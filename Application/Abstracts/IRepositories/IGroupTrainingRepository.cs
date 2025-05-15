@@ -9,5 +9,4 @@ public interface IGroupTrainingRepository: IRepository<GroupTraining>
     Task<IEnumerable<User>> GetGroupTrainingUsersByTrainingIdAsync(Guid trainingId);
     Task AssignUserToTrainingAsync(Guid userId, Guid trainingId);
     Task<IEnumerable<GroupTraining>> GetUserGroupTrainingsHistoryAsync(Guid userId);
-
 }
