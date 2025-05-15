@@ -14,6 +14,9 @@ public class GroupTrainingRepository: Repository<GroupTraining>, IGroupTrainingR
 
     public async Task<IEnumerable<GroupTraining>> GetGroupTrainingsByTrainerIdAndPeriodAsync(Guid trainerId, DateTime fromDate, DateTime toDate)
     {
+        fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+        toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+        
         var trainings = await _context.GroupTrainings
             .Where(t => t.TrainerId == trainerId && t.Date.Date >= fromDate.Date && t.Date.Date <= toDate.Date)
             .ToListAsync();
@@ -23,6 +26,9 @@ public class GroupTrainingRepository: Repository<GroupTraining>, IGroupTrainingR
 
     public async Task<IEnumerable<GroupTraining>> GetGroupTrainingsByGymIdAndPeriodAsync(Guid gymId, DateTime fromDate, DateTime toDate)
     {
+        fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+        toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+        
         var trainings = await _context.GroupTrainings
             .Where(t => t.GymId == gymId && t.Date.Date >= fromDate.Date && t.Date.Date <= toDate.Date)
             .ToListAsync();
