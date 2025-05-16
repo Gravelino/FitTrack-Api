@@ -35,7 +35,7 @@ public class User : IdentityUser<Guid>, IEntity
     
     public ICollection<UserGoal> Goals { get; set; }
    
-    //public ICollection<Purchase>? Purchases { get; set; }
+    public ICollection<Purchase> Purchases { get; set; }
     public ICollection<UserMembership> UserMemberships { get; set; }
     public ICollection<TrainerComment> TrainerComments { get; set; }
 
