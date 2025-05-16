@@ -26,5 +26,6 @@ public static class RepositoryServiceExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ITrainerCommentRepository, TrainerCommentRepository>();
         services.AddScoped<IGroupTrainingRepository, GroupTrainingRepository>();
+        services.AddScoped<IPurchaseRepository, PurchaseRepository>();
     }
 }
