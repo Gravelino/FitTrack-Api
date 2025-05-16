@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(FitTrackDbContext))]
-    partial class FitTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250516123832_AddPurchases")]
+    partial class AddPurchases
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,13 +249,15 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("GymId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("GymId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -260,6 +265,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GymId");
+
+                    b.HasIndex("GymId1");
 
                     b.ToTable("Memberships");
                 });
@@ -320,7 +327,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<Guid?>("ProductId")
                         .HasColumnType("uuid");
@@ -338,8 +345,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("MembershipId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("PurchaseDate");
 
                     b.HasIndex("UserId");
 
@@ -589,14 +594,16 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserMembership", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MembershipId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("MembershipId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("PurchaseDate")
@@ -608,19 +615,12 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("RemainingSessions")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExpirationDate");
+                    b.HasKey("UserId", "MembershipId");
 
                     b.HasIndex("MembershipId");
 
                     b.HasIndex("PurchaseId")
                         .IsUnique();
-
-                    b.HasIndex("UserId", "MembershipId");
 
                     b.ToTable("UserMemberships");
                 });
@@ -991,10 +991,14 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Membership", b =>
                 {
                     b.HasOne("Domain.Entities.Gym", "Gym")
-                        .WithMany("Memberships")
+                        .WithMany()
                         .HasForeignKey("GymId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Gym", null)
+                        .WithMany("Memberships")
+                        .HasForeignKey("GymId1");
 
                     b.Navigation("Gym");
                 });
