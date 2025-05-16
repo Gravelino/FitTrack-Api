@@ -40,7 +40,6 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddScoped<MainImageUrlResolver>();
-        services.AddScoped<ImagesResolver>();
         services.AddScoped<ProductImageResolver>();
     }
 }
