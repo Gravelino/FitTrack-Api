@@ -11,5 +11,4 @@ public class GymReadDto: IEntity
     public double Rating { get; set; }
     public Guid OwnerId { get; set; }
     public string MainImagePreSignedUrl { get; set; }
-    public ICollection<S3ObjectDto> Images { get; set; }
 }
