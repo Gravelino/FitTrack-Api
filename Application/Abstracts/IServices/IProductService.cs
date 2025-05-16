@@ -9,5 +9,5 @@ public interface IProductService: IService<ProductReadDto, ProductCreateDto, Pro
     Task<IEnumerable<ProductReadDto>> GetAllProductsAsync(string productType);
     Task<IEnumerable<ProductReadDto>> GetProductsByGymId(Guid gymId, string productType);
     Task<Guid> CreateGoodAsync(ProductCreateDto dto, IFormFile image);
-    Task UpdateGoodAsync(Guid id, ProductUpdateDto dto, IFormFile image);
+    Task UpdateGoodAsync(Guid id, ProductUpdateDto dto, IFormFile? image);
 }

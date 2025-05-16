@@ -44,7 +44,7 @@ public class ProductService: Service<ProductReadDto, ProductCreateDto, ProductUp
         return await _repository.AddAsync(product);
     }
 
-    public async Task UpdateGoodAsync(Guid id, ProductUpdateDto dto, IFormFile image)
+    public async Task UpdateGoodAsync(Guid id, ProductUpdateDto dto, IFormFile? image)
     {
         var product = await _repository.GetByIdAsync(id);
         if(product is null)
