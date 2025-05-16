@@ -26,7 +26,7 @@ public class GymService : Service<GymReadDto, GymCreateDto, GymUpdateDto, Gym>, 
         return _mapper.Map<IEnumerable<GymReadDto>>(gyms);
     }
 
-    public async Task<Guid> CreateAsync(GymCreateDto dto, IFormFile mainImage, List<IFormFile> additionalImages)
+    public async Task<Guid> CreateAsync(GymCreateDto dto, IFormFile mainImage)
     {
         var gym = _mapper.Map<Gym>(dto);
         gym.Id = Guid.NewGuid();
@@ -35,23 +35,12 @@ public class GymService : Service<GymReadDto, GymCreateDto, GymUpdateDto, Gym>, 
         {
             gym.MainImageUrl = await _s3Service.UploadFileAsync(mainImage, "gyms", gym.Id);
         }
-
-        if (additionalImages is not null)
-        {
-            gym.Images = new List<GymImage>();
-
-            foreach (var image in additionalImages)
-            {
-                var url = await _s3Service.UploadFileAsync(image, "gyms", gym.Id);
-                gym.Images.Add(new GymImage{ImageUrl = url, GymId = gym.Id});
-            }
-        }
         
         await _repository.AddAsync(gym);
         return gym.Id;
     }
     
-    public async Task UpdateAsync(Guid id, GymUpdateDto dto, IFormFile mainImage, List<IFormFile> additionalImages)
+    public async Task UpdateAsync(Guid id, GymUpdateDto dto, IFormFile? mainImage)
     {
         if (id != dto.Id)
             throw new ArgumentException("ID mismatch");
@@ -65,17 +54,6 @@ public class GymService : Service<GymReadDto, GymCreateDto, GymUpdateDto, Gym>, 
         if (mainImage != null)
         {
             gym.MainImageUrl = await _s3Service.UploadFileAsync(mainImage, "gyms", gym.Id);
-        }
-        
-        if (additionalImages != null && additionalImages.Count != 0)
-        {
-            gym.Images.Clear();
-
-            foreach (var file in additionalImages)
-            {
-                var url = await _s3Service.UploadFileAsync(file, "gyms", gym.Id);
-                gym.Images.Add(new GymImage { ImageUrl = url, GymId = gym.Id });
-            }
         }
 
         await _repository.UpdateAsync(gym.Id, gym);
