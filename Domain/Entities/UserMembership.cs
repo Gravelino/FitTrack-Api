@@ -13,12 +13,15 @@ public class UserMembership: IEntity
     public Membership Membership { get; set; }
 
     public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
-    public DateTime? ExpirationDate { get => ExpirationDate; set => PurchaseDate.AddMonths(Membership.DurationMonth ?? 1); }
+    private DateTime? _expirationDate;
+    public DateTime? ExpirationDate 
+    { 
+        get => _expirationDate ?? PurchaseDate.AddMonths(Membership.DurationMonth ?? 1);
+        set => _expirationDate = value;
+    }
+
     public int? RemainingSessions { get; set; }
     
     [NotMapped]
     public bool IsActive => DateTime.UtcNow < ExpirationDate && RemainingSessions is null or > 0;
-    
-    public Guid PurchaseId { get; set; }
-    public Purchase Purchase { get; set; }
 }

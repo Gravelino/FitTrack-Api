@@ -12,7 +12,7 @@ public class Product: IEntity
     public string? ImageUrl { get; set; }
 
     public Guid GymId { get; set; }
-    public Gym? Gym { get; set; }
+    public Gym Gym { get; set; }
 
     public ProductType ProductType { get; set; }
 }
