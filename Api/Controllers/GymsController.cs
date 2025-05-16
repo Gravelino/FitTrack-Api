@@ -60,5 +60,18 @@ public class GymsController : Controller<GymReadDto, GymCreateDto, GymUpdateDto,
     
     [Authorize(Roles = IdentityRoleConstants.Owner)]
     public override async Task<IActionResult> Delete(Guid id) =>
-        await base.Delete(id);   
+        await base.Delete(id);  
+    
+    [Authorize(Roles = IdentityRoleConstants.Owner + "," + IdentityRoleConstants.Admin)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{gymId:guid}/details")]
+    public async Task<ActionResult<GymDetailsDto>> GetGymDetails(Guid gymId)
+    {
+        var gym = await _service.GetGymDetailsAsync(gymId);
+        if(gym is null)
+            return NotFound();
+        
+        return Ok(gym);
+    }
 }
