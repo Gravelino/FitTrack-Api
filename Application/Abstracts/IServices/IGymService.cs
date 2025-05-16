@@ -10,4 +10,5 @@ public interface IGymService: IService<GymReadDto, GymCreateDto, GymUpdateDto, G
 
     Task<Guid> CreateAsync(GymCreateDto dto, IFormFile mainImage, List<IFormFile> additionalImages);
     Task UpdateAsync(Guid id, GymUpdateDto dto, IFormFile mainImage, List<IFormFile> additionalImages);
+    Task<GymDetailsDto?> GetGymDetailsAsync(Guid id);
 }

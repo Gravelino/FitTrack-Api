@@ -80,4 +80,10 @@ public class GymService : Service<GymReadDto, GymCreateDto, GymUpdateDto, Gym>, 
 
         await _repository.UpdateAsync(gym.Id, gym);
     }
+
+    public async Task<GymDetailsDto?> GetGymDetailsAsync(Guid id)
+    {
+        var gym = await _repository.GetGymDetailsAsync(id);
+        return _mapper.Map<GymDetailsDto>(gym);
+    }
 }
