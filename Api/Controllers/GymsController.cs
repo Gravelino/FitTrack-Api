@@ -34,9 +34,9 @@ public class GymsController : Controller<GymReadDto, GymCreateDto, GymUpdateDto,
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<Guid>> Create([FromForm] GymCreateDto dto,
-        [FromForm] IFormFile mainImage, [FromForm] List<IFormFile> additionalImages)
+        [FromForm] IFormFile mainImage)
     {
-        var gymId = await _service.CreateAsync(dto, mainImage, additionalImages);
+        var gymId = await _service.CreateAsync(dto, mainImage);
         return CreatedAtAction(nameof(GetById), new { id = gymId }, gymId);
     }
     
@@ -47,14 +47,14 @@ public class GymsController : Controller<GymReadDto, GymCreateDto, GymUpdateDto,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Update(Guid id, [FromForm] GymUpdateDto dto,
-        [FromForm] IFormFile mainImage, [FromForm] List<IFormFile> additionalImages)
+        [FromForm] IFormFile? mainImage)
     {
         if (id != dto.Id)
         {
             return BadRequest();
         }
         
-        await _service.UpdateAsync(id, dto, mainImage, additionalImages);
+        await _service.UpdateAsync(id, dto, mainImage);
         return NoContent();
     }
     
