@@ -33,7 +33,6 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
     public DbSet<WaterIntakeLog> WaterIntakeLogs { get; set; }
     public DbSet<UserGoal> UserGoals { get; set; }
     public DbSet<GymFeedback> GymFeedbacks { get; set; }
-    public DbSet<GymImage> GymImages { get; set; }
     public DbSet<Membership> Memberships { get; set; }
     public DbSet<UserMembership> UserMemberships { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -126,8 +125,6 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 address.Property(a => a.Building).HasMaxLength(10);
                 address.Property(a => a.ZipCode).HasMaxLength(20);
             });
-            
-            entity.Navigation(g => g.Images).AutoInclude();
         });
         
         builder.Entity<UserGoal>(entity =>

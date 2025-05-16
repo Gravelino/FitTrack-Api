@@ -16,8 +16,6 @@ public class Gym : IEntity
     public Owner Owner { get; set; }
     
     public required string MainImageUrl { get; set; }
-    public ICollection<GymImage> Images { get; set; }
-
     public int RatingCount { get; set; }
     public int RatingSum { get; set; }
 
