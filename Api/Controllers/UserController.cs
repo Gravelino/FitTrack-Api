@@ -1,5 +1,6 @@
 using Application.Abstracts.IServices;
 using Application.DTOs.Gym;
+using Application.DTOs.UserMembership;
 using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -18,12 +19,14 @@ public class UserController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly IGymService _gymService;
     private readonly ITrainerService _trainerService;
+    private readonly IUserMembershipService _userMembershipService;
 
-    public UserController(UserManager<User> userManager, IGymService gymService, ITrainerService trainerService)
+    public UserController(UserManager<User> userManager, IGymService gymService, ITrainerService trainerService, IUserMembershipService userMembershipService)
     {
         _userManager = userManager;
         _gymService = gymService;
         _trainerService = trainerService;
+        _userMembershipService = userMembershipService;
     }
     
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -90,5 +93,18 @@ public class UserController : ControllerBase
             return NotFound();
         
         return Ok(trainer);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("get-active-membership-by-gymId/{gymId:guid}")]
+    public async Task<ActionResult<UserMembershipReadDto>> GetActiveMembershipByGymId([FromQuery] Guid userId,
+        Guid gymId)
+    {
+        var membership = await _userMembershipService.GetUserActiveMembershipByUserIdAndGymIdAsync(userId, gymId);
+        if(membership is null)
+            return NotFound();
+        
+        return Ok(membership);
     }
 }
