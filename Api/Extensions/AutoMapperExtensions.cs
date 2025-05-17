@@ -25,7 +25,8 @@ public static class AutoMapperExtensions
             typeof(ProductProfile),
             typeof(TrainerCommentProfile),
             typeof(GroupTrainingProfile),
-            typeof(PurchaseProfile)
+            typeof(PurchaseProfile),
+            typeof(UserMembershipProfile)
         );
     }
 }
