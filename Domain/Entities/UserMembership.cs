@@ -30,7 +30,8 @@ public class UserMembership: IEntity
 
     
     [NotMapped]
-    public bool IsActive => DateTime.UtcNow >= StartDate &&
+    public bool IsActive => Status == MembershipStatus.Active && 
+                            DateTime.UtcNow >= StartDate &&
                             DateTime.UtcNow < ExpirationDate &&
                             RemainingSessions is null or > 0;
     
