@@ -166,6 +166,8 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                   .WithMany(m => m.UserMemberships)
                   .HasForeignKey(um => um.MembershipId)
                   .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.Navigation(um => um.Membership).AutoInclude();
         });
 
         builder.Entity<Membership>(entity =>
@@ -188,6 +190,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                 .HasForeignKey(m => m.GymId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            entity.Navigation(m => m.Gym).AutoInclude();
         });
 
         builder.Entity<Product>(entity =>
@@ -224,8 +227,8 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
                   .HasForeignKey(p => p.GymId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            // entity.Navigation(p => p.Product).AutoInclude();
-            // entity.Navigation(p => p.Gym).AutoInclude();
+            entity.Navigation(p => p.Product).AutoInclude();
+            entity.Navigation(p => p.Gym).AutoInclude();
         });
         
         builder.Entity<GymFeedback>().Navigation(f => f.User).AutoInclude();
