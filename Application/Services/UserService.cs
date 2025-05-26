@@ -75,7 +75,7 @@ public class UserService: IUserService
             Calories = user.Meals.Sum(m => m.Calories),
             Weight = user.Weights.FirstOrDefault()?.WeightKg ?? 0,
             SleepMinutes = user.Sleeps.Sum(s =>
-                (int)(s.SleepStart - s.WakeUpTime).TotalMinutes)
+                (int)(s.WakeUpTime - s.SleepStart).TotalMinutes)
         };
     }
 
