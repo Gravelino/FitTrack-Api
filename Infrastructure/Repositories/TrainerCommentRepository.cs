@@ -12,6 +12,8 @@ public class TrainerCommentRepository: Repository<TrainerComment>, ITrainerComme
 
     public async Task<IEnumerable<TrainerComment>> GetTrainerCommentsByUserIdAndDate(Guid userId, DateTime date)
     {
+        date = DateTime.SpecifyKind(date, DateTimeKind.Utc); 
+        
         var comments = await _context.TrainerComments
             .Where(c => c.UserId == userId && c.MealDate.Date == date.Date)
             .ToListAsync();
@@ -21,6 +23,8 @@ public class TrainerCommentRepository: Repository<TrainerComment>, ITrainerComme
 
     public async Task<IEnumerable<TrainerComment>> GetTrainerCommentsByTrainerIdAndDate(Guid trainerId, DateTime date)
     {
+        date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+        
         var comments = await _context.TrainerComments
             .Where(c => c.TrainerId == trainerId && c.MealDate.Date == date.Date)
             .ToListAsync();

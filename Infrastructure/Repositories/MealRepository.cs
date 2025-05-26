@@ -15,7 +15,7 @@ public class MealRepository : Repository<Meal>, IMealRepository
         date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
         var meals = await _context.Meals
-            .Where(m => m.UserId == userId && m.DateOfConsumption == date)
+            .Where(m => m.UserId == userId && m.DateOfConsumption.Date == date.Date)
             .ToListAsync();
         
         return meals;
@@ -28,8 +28,8 @@ public class MealRepository : Repository<Meal>, IMealRepository
 
         var meals = await _context.Meals
             .Where(m => m.UserId == userId
-                        && m.DateOfConsumption >= fromDate
-                        && m.DateOfConsumption <= toDate)
+                        && m.DateOfConsumption.Date >= fromDate.Date
+                        && m.DateOfConsumption.Date <= toDate.Date)
             .ToListAsync();
 
         return meals;
