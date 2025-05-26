@@ -1,6 +1,6 @@
 using Application.Abstracts.IServices;
-using Application.DTOs;
 using Application.DTOs.GymStaff;
+using Application.DTOs.User;
 using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

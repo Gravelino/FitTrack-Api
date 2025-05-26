@@ -22,17 +22,19 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
 
     public async Task<IEnumerable<UserMembership>> GetUserActiveMembershipsByUserIdAsync(Guid userId)
     {
-        var memberships = await _context.UserMemberships
-            .Where(u => u.UserId == userId && u.IsActive)
+        return await _context.UserMemberships
+            .Include(um => um.Membership)
+            .Where(um => um.UserId == userId && 
+                         um.Status == MembershipStatus.Active)
             .ToListAsync();
-        
-        return memberships;
     }
 
     public async Task<UserMembership?> GetUserActiveMembershipByUserIdAndGymIdAsync(Guid userId, Guid gymId)
     {
         var membership = await _context.UserMemberships
-            .Where(u => u.UserId == userId && u.IsActive && u.Membership.GymId == gymId)
+            .Where(u => u.UserId == userId &&
+                        u.Status == MembershipStatus.Active &&
+                        u.Membership.GymId == gymId)
             .FirstOrDefaultAsync();
         
         return membership;
@@ -41,7 +43,9 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
     public async Task<IEnumerable<UserMembership>> GetUserPendingMembershipsByUserIdAsync(Guid userId)
     {
         var memberships = await _context.UserMemberships
-            .Where(u => u.UserId == userId && u.IsPending)
+            .Where(u => u.UserId == userId &&
+                        u.Status == MembershipStatus.Pending
+                        && DateTime.UtcNow < u.StartDate)
             .ToListAsync();
         
         return memberships;
@@ -49,18 +53,21 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
 
     public async Task<bool> CanAddMembershipAsync(Guid userId, Guid gymId, DateTime startDate)
     {
-         var memberships = await _context.UserMemberships
-             .Where(u => u.Membership.GymId == gymId && u.UserId == userId)
-             .ToListAsync();
-         
-         var activePending = memberships.Count(m => m.IsActive || m.IsPending);
-         
-         return activePending < 2;
+        var activeAndPendingCount = await _context.UserMemberships
+            .Include(um => um.Membership)
+            .Where(um => um.UserId == userId && 
+                         um.Membership.GymId == gymId && 
+                         (um.Status == MembershipStatus.Active || 
+                          um.Status == MembershipStatus.Pending))
+            .CountAsync();
+
+        return activeAndPendingCount < 2;
     }
 
     public async Task<DateTime> GetStartDateForNewMembershipAsync(Guid userId, Guid gymId)
     {
         var activeMembership = await _context.UserMemberships
+            .Include(um => um.Membership)
             .Where(um => um.UserId == userId && 
                          um.Membership.GymId == gymId && 
                          um.Status == MembershipStatus.Active)

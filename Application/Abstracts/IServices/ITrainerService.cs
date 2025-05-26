@@ -1,5 +1,5 @@
-using Application.DTOs;
 using Application.DTOs.GymStaff;
+using Application.DTOs.User;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Abstracts.IServices;

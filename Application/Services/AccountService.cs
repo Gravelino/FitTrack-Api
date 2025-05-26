@@ -3,6 +3,7 @@ using Application.Abstracts;
 using Application.Abstracts.IRepositories;
 using Application.Abstracts.IServices;
 using Application.DTOs;
+using Application.DTOs.User;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Enums;

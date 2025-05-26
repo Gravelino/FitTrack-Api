@@ -1,5 +1,5 @@
-using Application.DTOs;
 using Application.DTOs.GroupTraining;
+using Application.DTOs.User;
 using Domain.Entities;
 
 namespace Application.Abstracts.IServices;

@@ -1,9 +1,6 @@
-using Application.Abstracts;
 using Application.Abstracts.IServices;
 using Application.Mapping.Resolvers;
 using Application.Services;
-using Infrastructure.Processors;
-using Infrastructure.Repositories;
 
 namespace Api.Extensions;
 
@@ -11,8 +8,6 @@ public static class ApplicationServiceExtensions
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
-        
         services.AddScoped(typeof(IService<,,,>), typeof(Service<,,,>));
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IOwnerService, OwnerService>();
@@ -37,8 +32,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IGroupTrainingService, GroupTrainingService>();
         services.AddScoped<IPurchaseService, PurchaseService>();
         services.AddScoped<IUserMembershipService, UserMembershipService>();
-
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserService, UserService>();
         
         services.AddScoped<MainImageUrlResolver>();
         services.AddScoped<ProductImageResolver>();

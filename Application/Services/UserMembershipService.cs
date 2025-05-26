@@ -62,6 +62,7 @@ public class UserMembershipService: Service<UserMembershipReadDto, UserMembershi
             UserId = dto.UserId,
             MembershipId = dto.MembershipId,
             StartDate = startDate,
+            ExpirationDate = membership.DurationMonth.HasValue ? startDate.AddMonths((int)membership.DurationMonth) : null,
             PurchaseDate = DateTime.UtcNow,
             RemainingSessions = membership.AllowedSessions,
             Status = startDate.Date == DateTime.UtcNow.Date

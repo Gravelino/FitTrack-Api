@@ -1,4 +1,6 @@
+using Application.Abstracts;
 using Application.Abstracts.IRepositories;
+using Infrastructure.Processors;
 using Infrastructure.Repositories;
 
 namespace Api.Extensions;
@@ -7,6 +9,8 @@ public static class RepositoryServiceExtensions
 {
     public static void AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IAuthTokenProcessor, AuthTokenProcessor>();
+        
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
@@ -28,5 +32,7 @@ public static class RepositoryServiceExtensions
         services.AddScoped<IGroupTrainingRepository, GroupTrainingRepository>();
         services.AddScoped<IPurchaseRepository, PurchaseRepository>();
         services.AddScoped<IUserMembershipRepository, UserMembershipRepository>();
+        
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

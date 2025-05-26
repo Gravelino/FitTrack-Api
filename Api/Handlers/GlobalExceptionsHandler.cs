@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
@@ -36,6 +37,7 @@ public class GlobalExceptionsHandler : IExceptionHandler
             InvalidPasswordException => (HttpStatusCode.BadRequest, exception.Message),
             BusinessException => (HttpStatusCode.BadRequest, exception.Message),
             NotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            ValidationException => (HttpStatusCode.BadRequest, exception.Message),
             _ => (HttpStatusCode.InternalServerError, $"An unexpected error has occurred: {exception.Message}.")
         };
     }

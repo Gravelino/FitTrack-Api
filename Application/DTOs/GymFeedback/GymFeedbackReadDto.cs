@@ -1,4 +1,5 @@
 using Application.Abstracts;
+using Application.DTOs.User;
 
 namespace Application.DTOs.GymFeedback;
 

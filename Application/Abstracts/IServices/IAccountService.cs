@@ -1,6 +1,5 @@
 using System.Security.Claims;
-using Application.DTOs;
-using Domain.Entities;
+using Application.DTOs.User;
 using Domain.Requests;
 using Google.Apis.Auth;
 

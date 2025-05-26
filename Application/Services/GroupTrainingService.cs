@@ -2,6 +2,7 @@ using Application.Abstracts.IRepositories;
 using Application.Abstracts.IServices;
 using Application.DTOs;
 using Application.DTOs.GroupTraining;
+using Application.DTOs.User;
 using AutoMapper;
 using Domain.Entities;
 

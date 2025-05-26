@@ -1,5 +1,5 @@
 using Application.Abstracts.IServices;
-using Application.DTOs;
+using Application.DTOs.User;
 using AutoMapper;
 using Domain.Entities;
 
