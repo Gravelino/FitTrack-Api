@@ -7,4 +7,5 @@ public interface IPurchaseService: IService<PurchaseReadDto, PurchaseCreateDto, 
 {
     Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByUserIdAsync(Guid userId);
     Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByGymIdAndPeriodAsync(Guid gymId, DateTime fromDate, DateTime toDate);
+    Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByOwnerIdAndPeriodAsync(Guid ownerId, DateTime fromDate, DateTime toDate);
 }

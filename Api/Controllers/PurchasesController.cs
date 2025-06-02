@@ -44,4 +44,19 @@ public class PurchasesController: Controller<PurchaseReadDto, PurchaseCreateDto,
         
         return Ok(purchases);
     }
+    
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    [HttpGet("get-history-by-ownerId-and-period/{ownerId:guid}")]
+    public async Task<ActionResult<IEnumerable<PurchaseReadDto>>> GetPurchasesHistoryByOwnerIdAndPeriod(Guid ownerId,
+        [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+    {
+        var purchases = await _service.GetPurchasesHistoryByOwnerIdAndPeriodAsync(ownerId,
+            fromDate, toDate);
+        if(!purchases.Any())
+            return NotFound();
+        
+        return Ok(purchases);
+    }
 }

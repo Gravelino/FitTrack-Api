@@ -21,9 +21,17 @@ public class PurchaseService: Service<PurchaseReadDto, PurchaseCreateDto, Purcha
         return _mapper.Map<IEnumerable<PurchaseReadDto>>(purchases);   
     }
 
-    public async Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByGymIdAndPeriodAsync(Guid gymId, DateTime fromDate, DateTime toDate)
+    public async Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByGymIdAndPeriodAsync(Guid gymId,
+        DateTime fromDate, DateTime toDate)
     {
         var purchases = await _repository.GetPurchasesByGymIdAndPeriodAsync(gymId, fromDate, toDate);
+        return _mapper.Map<IEnumerable<PurchaseReadDto>>(purchases);
+    }
+
+    public async Task<IEnumerable<PurchaseReadDto>> GetPurchasesHistoryByOwnerIdAndPeriodAsync(Guid ownerId,
+        DateTime fromDate, DateTime toDate)
+    {
+        var purchases = await _repository.GetPurchasesHistoryByOwnerIdAndPeriodAsync(ownerId, fromDate, toDate);
         return _mapper.Map<IEnumerable<PurchaseReadDto>>(purchases);
     }
 }

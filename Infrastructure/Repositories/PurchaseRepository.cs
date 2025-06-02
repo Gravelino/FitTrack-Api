@@ -34,4 +34,19 @@ public class PurchaseRepository: Repository<Purchase>, IPurchaseRepository
         
         return purchases;
     }
+
+    public async Task<IEnumerable<Purchase>> GetPurchasesHistoryByOwnerIdAndPeriodAsync(Guid ownerId, DateTime fromDate, DateTime toDate)
+    {
+        fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+        toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+        
+        var purchases = await _context.Purchases
+            .Where(p => p.Gym.OwnerId == ownerId &&
+                        p.PurchaseDate.Date >= fromDate.Date &&
+                        p.PurchaseDate.Date <= toDate.Date)
+            .OrderByDescending(p => p.PurchaseDate)
+            .ToListAsync();
+        
+        return purchases;
+    }
 }
