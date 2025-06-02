@@ -94,4 +94,20 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
         
         return memberships;
     }
+
+    public async Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(Guid ownerId,
+        DateTime fromDate, DateTime toDate)
+    {
+        fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+        toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+        
+        var memberships = await _context.UserMemberships
+            .Include(u => u.Membership.Gym)
+            .Where(u => u.Membership.Gym.OwnerId == ownerId &&
+                        u.PurchaseDate.Date >= fromDate.Date &&
+                        u.PurchaseDate.Date <= toDate.Date)
+            .ToListAsync();
+        
+        return memberships;
+    }
 }

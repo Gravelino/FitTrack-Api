@@ -80,4 +80,12 @@ public class UserMembershipService: Service<UserMembershipReadDto, UserMembershi
         var memberships = await _repository.GetUserMembershipsHistoryByGymIdAsync(gymId);
         return _mapper.Map<IEnumerable<UserMembershipReadDto>>(memberships);  
     }
+
+    public async Task<IEnumerable<UserMembershipReadDto>> GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(Guid ownerId,
+        DateTime fromDate, DateTime toDate)
+    {
+        var memberships = await _repository.GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(
+            ownerId, fromDate, toDate);
+        return _mapper.Map<IEnumerable<UserMembershipReadDto>>(memberships); 
+    }
 }

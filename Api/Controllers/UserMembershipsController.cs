@@ -67,4 +67,17 @@ public class UserMembershipsController: Controller<UserMembershipReadDto, UserMe
         
         return Ok(userMemberships);
     }
+    
+    [Authorize(Roles = IdentityRoleConstants.Owner)]
+    [HttpGet("get-history-by-ownerId/{owner:guid}")]
+    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByGymIdAsync(
+    Guid ownerId, [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+    {
+        var userMemberships =
+            await _service.GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(ownerId, fromDate, toDate);
+        if(!userMemberships.Any())
+            return NotFound();
+        
+        return Ok(userMemberships);
+    }
 }
