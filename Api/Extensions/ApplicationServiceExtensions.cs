@@ -33,6 +33,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IPurchaseService, PurchaseService>();
         services.AddScoped<IUserMembershipService, UserMembershipService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPurchaseStatisticsService, PurchaseStatisticsService>();
         
         services.AddScoped<MainImageUrlResolver>();
         services.AddScoped<ProductImageResolver>();
