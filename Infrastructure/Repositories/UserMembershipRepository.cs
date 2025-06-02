@@ -85,4 +85,13 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
 
         return startDate;
     }
+
+    public async Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId)
+    {
+        var memberships = await _context.UserMemberships
+            .Where(u => u.Membership.GymId == gymId)
+            .ToListAsync();
+        
+        return memberships;
+    }
 }

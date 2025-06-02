@@ -11,5 +11,5 @@ public interface IUserMembershipService: IService<UserMembershipReadDto, UserMem
     Task<UserMembershipReadDto?> GetUserActiveMembershipByUserIdAndGymIdAsync(Guid userId, Guid gymId);
     Task<IEnumerable<UserMembershipReadDto>> GetUserPendingMembershipsByUserIdAsync(Guid userId);
     Task<Guid> CreateUserMembershipAsync(UserMembershipCreateDto dto);
-
+    Task<IEnumerable<UserMembershipReadDto>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId);
 }

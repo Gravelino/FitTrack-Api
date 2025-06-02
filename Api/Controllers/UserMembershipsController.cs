@@ -1,7 +1,9 @@
 using Application.Abstracts.IServices;
 using Application.DTOs.UserMembership;
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -54,4 +56,15 @@ public class UserMembershipsController: Controller<UserMembershipReadDto, UserMe
         var id = await _service.CreateUserMembershipAsync(dto);
         return CreatedAtAction(nameof(GetById), new {id}, id);   
     }   
+    
+    [Authorize(Roles = IdentityRoleConstants.Admin + "," + IdentityRoleConstants.Owner)]
+    [HttpGet("get-history-by-gymId/{gymId:guid}")]
+    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId)
+    {
+        var userMemberships = await _service.GetUserMembershipsHistoryByGymIdAsync(gymId);
+        if(!userMemberships.Any())
+            return NotFound();
+        
+        return Ok(userMemberships);
+    }
 }
