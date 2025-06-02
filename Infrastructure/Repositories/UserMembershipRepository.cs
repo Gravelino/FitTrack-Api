@@ -86,10 +86,17 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
         return startDate;
     }
 
-    public async Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId)
+    public async Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId, DateTime fromDate,
+        DateTime toDate)
     {
+        fromDate = DateTime.SpecifyKind(fromDate, DateTimeKind.Utc);
+        toDate = DateTime.SpecifyKind(toDate, DateTimeKind.Utc);
+        
         var memberships = await _context.UserMemberships
-            .Where(u => u.Membership.GymId == gymId)
+            .Where(u => u.Membership.GymId == gymId&&
+                        u.PurchaseDate.Date >= fromDate.Date &&
+                        u.PurchaseDate.Date <= toDate.Date)
+            .OrderByDescending(p => p.PurchaseDate)
             .ToListAsync();
         
         return memberships;
@@ -106,6 +113,7 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
             .Where(u => u.Membership.Gym.OwnerId == ownerId &&
                         u.PurchaseDate.Date >= fromDate.Date &&
                         u.PurchaseDate.Date <= toDate.Date)
+            .OrderByDescending(p => p.PurchaseDate)
             .ToListAsync();
         
         return memberships;

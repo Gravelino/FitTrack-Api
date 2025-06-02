@@ -59,9 +59,11 @@ public class UserMembershipsController: Controller<UserMembershipReadDto, UserMe
     
     [Authorize(Roles = IdentityRoleConstants.Admin + "," + IdentityRoleConstants.Owner)]
     [HttpGet("get-history-by-gymId/{gymId:guid}")]
-    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId)
+    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId,
+        [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
     {
-        var userMemberships = await _service.GetUserMembershipsHistoryByGymIdAsync(gymId);
+        var userMemberships = await _service.GetUserMembershipsHistoryByGymIdAsync(gymId,
+            fromDate, toDate);
         if(!userMemberships.Any())
             return NotFound();
         
@@ -70,8 +72,8 @@ public class UserMembershipsController: Controller<UserMembershipReadDto, UserMe
     
     [Authorize(Roles = IdentityRoleConstants.Owner)]
     [HttpGet("get-history-by-ownerId/{owner:guid}")]
-    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByGymIdAsync(
-    Guid ownerId, [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+    public async Task<ActionResult<IEnumerable<UserMembershipReadDto>>> GetUserMembershipsHistoryByOwnerIdAsync(
+        Guid ownerId, [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
     {
         var userMemberships =
             await _service.GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(ownerId, fromDate, toDate);

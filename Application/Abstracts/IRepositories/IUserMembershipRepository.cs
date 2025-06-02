@@ -11,6 +11,6 @@ public interface IUserMembershipRepository: IRepository<UserMembership>
     Task<bool> CanAddMembershipAsync(Guid userId, Guid gymId, DateTime startDate);
     Task<DateTime> GetStartDateForNewMembershipAsync(Guid userId, Guid gymId);
     
-    Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId);
+    Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId, DateTime fromDate, DateTime toDate);
     Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(Guid ownerId, DateTime fromDate, DateTime toDate);
 }
