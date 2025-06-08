@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Application.DTOs.User;
 using Domain.Requests;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Abstracts.IServices;
 
@@ -19,4 +20,5 @@ public interface IAccountService
     Task DeleteAsync(ClaimsPrincipal user);
     Task<(string, string, Guid?)> LoginMobileAsync(LoginMobileRequest loginRequest);
     Task DeleteByEmail(DeleteByEmailRequest deleteByEmailRequest);
+    Task LogoutAsync(HttpResponse response, ClaimsPrincipal claims);
 }

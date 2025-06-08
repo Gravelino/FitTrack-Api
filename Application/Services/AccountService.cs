@@ -10,6 +10,7 @@ using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Requests;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -420,6 +421,38 @@ public class AccountService : IAccountService
         if (!result.Succeeded)
         {
             throw new UnauthorizedAccessException();
+        }
+    }
+
+    public async Task LogoutAsync(HttpResponse response, ClaimsPrincipal claims)
+    {
+        response.Cookies.Delete("ACCESS_TOKEN", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            Expires = DateTime.UtcNow,
+            SameSite = SameSiteMode.None,
+            IsEssential = true
+        });
+    
+        response.Cookies.Delete("REFRESH_TOKEN", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            Expires = DateTime.UtcNow,
+            SameSite = SameSiteMode.None,
+            IsEssential = true
+        });
+        
+        var userId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.RefreshTokenExpiresAtUtc = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+            }
         }
     }
 }
