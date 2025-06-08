@@ -1,3 +1,4 @@
+using System.Globalization;
 using Application.Abstracts.IRepositories;
 using Application.Abstracts.IServices;
 using Application.DTOs.Purchase;
@@ -23,80 +24,138 @@ public class PurchaseStatisticsService: IPurchaseStatisticsService
         var enumerable = purchases.ToList();
         
         var goods = enumerable.Where(p => p.Product.ProductType == ProductType.Good).ToList();
-        var goodsCount = goods.Count;
-        var goodsSum = goods.Sum(p => p.Price);
         
         var services = enumerable.Where(p => p.Product.ProductType == ProductType.Service).ToList();
-        var servicesCount = services.Count;
-        var servicesSum = services.Sum(p => p.Price);
         
         var memberships = 
             await _userMembershipRepository.GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(ownerId, from, to);
-        var userMemberships = memberships.ToList();
-        var membershipsCount = userMemberships.Count;
-        var membershipsSum = userMemberships.Sum(m => m.Membership.Price);
+
+        var groupedGoods = goods
+            .GroupBy(m => m.Gym)
+            .Select(g => new PurchaseStatistic(
+                g.Key.Id,
+                g.Key.Name,
+                g.Count(),
+                g.Sum(p => p.Price)
+            ))
+            .ToList();
+        
+        var groupedServices = services
+            .GroupBy(m => m.Gym)
+            .Select(g => new PurchaseStatistic(
+                g.Key.Id,
+                g.Key.Name,
+                g.Count(),
+                g.Sum(p => p.Price)
+            ))
+            .ToList();
+        
+        var groupedMemberships = memberships
+            .GroupBy(m => m.Membership.Gym)
+            .Select(g => new PurchaseStatistic(
+                g.Key.Id,
+                g.Key.Name,
+                g.Count(),
+                g.Sum(p => p.Membership.Price)
+            ))
+            .ToList();
 
         return new PurchaseStatisticsDto
         {
-            Memberships = new PurchaseStatistic
-            {
-                TotalIncome = membershipsSum,
-                TotalQuantity = membershipsCount
-            },
-
-            Goods = new PurchaseStatistic
-            {
-                TotalIncome = goodsSum,
-                TotalQuantity = goodsCount
-            },
-
-            Services = new PurchaseStatistic
-            {
-                TotalIncome = servicesSum,
-                TotalQuantity = servicesCount
-            }
+            Memberships = groupedMemberships,
+            Services = groupedServices,
+            Goods = groupedGoods
         };
     }
 
-    public async Task<PurchaseStatisticsDto> GetStatisticsByGymIdAndPeriodAsync(Guid gymId, DateTime from, DateTime to)
-    {
+    public async Task<PurchaseStatisticsGroupedDto> GetStatisticsByGymIdAndPeriodAsync(Guid gymId, DateTime from, DateTime to,
+        PurchasesGroupBy groupBy)
+    {   
         var purchases = 
             await _purchaseRepository.GetPurchasesByGymIdAndPeriodAsync(gymId, from, to);
         var enumerable = purchases.ToList();
         
         var goods = enumerable.Where(p => p.Product.ProductType == ProductType.Good).ToList();
-        var goodsCount = goods.Count;
-        var goodsSum = goods.Sum(p => p.Price);
         
         var services = enumerable.Where(p => p.Product.ProductType == ProductType.Service).ToList();
-        var servicesCount = services.Count;
-        var servicesSum = services.Sum(p => p.Price);
         
         var memberships = 
             await _userMembershipRepository.GetUserMembershipsHistoryByGymIdAsync(gymId, from, to);
-        var userMemberships = memberships.ToList();
-        var membershipsCount = userMemberships.Count;
-        var membershipsSum = userMemberships.Sum(m => m.Membership.Price);
-
-        return new PurchaseStatisticsDto
+        
+        var groupedGoods = groupBy switch
         {
-            Memberships = new PurchaseStatistic
-            {
-                TotalIncome = membershipsSum,
-                TotalQuantity = membershipsCount
-            },
+            PurchasesGroupBy.Day => goods
+                .GroupBy(m => m.PurchaseDate.Date)
+                .Select(g => new PurchaseStatisticGrouped(
+                     g.Key.ToString(CultureInfo.InvariantCulture),
+                     g.Count(),
+                     g.Sum(p => p.Price)
+                ))
+                .ToList(),
 
-            Goods = new PurchaseStatistic
-            {
-                TotalIncome = goodsSum,
-                TotalQuantity = goodsCount
-            },
+            PurchasesGroupBy.Month => goods
+                .GroupBy(m => new { m.PurchaseDate.Year, m.PurchaseDate.Month })
+                .Select(g => new PurchaseStatisticGrouped(
+                    $"{g.Key.Year}-{g.Key.Month:D2}",
+                    g.Count(),
+                    g.Sum(p => p.Price)
+                ))
+                .ToList(),
 
-            Services = new PurchaseStatistic
-            {
-                TotalIncome = servicesSum,
-                TotalQuantity = servicesCount
-            }
+            _ => throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy, null)
+        };
+        
+        var groupedServices = groupBy switch
+        {
+            PurchasesGroupBy.Day => services
+                .GroupBy(m => m.PurchaseDate.Date)
+                .Select(g => new PurchaseStatisticGrouped(
+                    g.Key.ToString(CultureInfo.InvariantCulture),
+                    g.Count(),
+                    g.Sum(p => p.Price)
+                ))
+                .ToList(),
+
+            PurchasesGroupBy.Month => services
+                .GroupBy(m => new { m.PurchaseDate.Year, m.PurchaseDate.Month })
+                .Select(g => new PurchaseStatisticGrouped(
+                    $"{g.Key.Year}-{g.Key.Month:D2}",
+                    g.Count(),
+                    g.Sum(p => p.Price)
+                ))
+                .ToList(),
+
+            _ => throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy, null)
+        };
+        
+        var groupedMemberships = groupBy switch
+        {
+            PurchasesGroupBy.Day => memberships
+                .GroupBy(m => m.PurchaseDate.Date)
+                .Select(g => new PurchaseStatisticGrouped(
+                    g.Key.ToString(CultureInfo.InvariantCulture),
+                    g.Count(),
+                    g.Sum(p => p.Membership.Price)
+                ))
+                .ToList(),
+
+            PurchasesGroupBy.Month => memberships
+                .GroupBy(m => new { m.PurchaseDate.Year, m.PurchaseDate.Month })
+                .Select(g => new PurchaseStatisticGrouped(
+                    $"{g.Key.Year}-{g.Key.Month:D2}",
+                    g.Count(),
+                    g.Sum(p => p.Membership.Price)
+                ))
+                .ToList(),
+
+            _ => throw new ArgumentOutOfRangeException(nameof(groupBy), groupBy, null)
+        };
+
+        return new PurchaseStatisticsGroupedDto
+        {
+            Memberships = groupedMemberships,
+            Services = groupedServices,
+            Goods = groupedGoods,
         };
     }
 }

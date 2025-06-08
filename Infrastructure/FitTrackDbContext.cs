@@ -229,6 +229,7 @@ public class FitTrackDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gui
 
             entity.Navigation(p => p.Product).AutoInclude();
             entity.Navigation(p => p.Gym).AutoInclude();
+            entity.Navigation(p => p.User).AutoInclude();
         });
         
         builder.Entity<GymFeedback>().Navigation(f => f.User).AutoInclude();

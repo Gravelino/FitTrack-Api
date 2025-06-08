@@ -18,15 +18,20 @@ public class PurchaseStatisticsController: ControllerBase
     }
 
     [HttpGet("get-by-gymId/{gymId:guid}")]
-    public async Task<ActionResult<IEnumerable<PurchaseStatisticsDto>>> GetStatisticsByGymAsync(Guid gymId,
-        [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+    public async Task<ActionResult<IEnumerable<PurchaseStatisticsGroupedDto>>> GetStatisticsByGymAsync(Guid gymId,
+        [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate, [FromQuery] string purchasesGroupBy)
     {
+        if (!Enum.TryParse<PurchasesGroupBy>(purchasesGroupBy, true, out var groupBy))
+        {
+            return BadRequest("Invalid goal type");
+        }
         if (fromDate > toDate)
         {
             return BadRequest("Invalid date");
         }
         
-        var statistics = await _purchaseStatisticsService.GetStatisticsByGymIdAndPeriodAsync(gymId, fromDate, toDate);
+        var statistics =
+            await _purchaseStatisticsService.GetStatisticsByGymIdAndPeriodAsync(gymId, fromDate, toDate, groupBy);
         return Ok(statistics);   
     }
     
@@ -39,7 +44,7 @@ public class PurchaseStatisticsController: ControllerBase
             return BadRequest("Invalid date");
         }
         
-        var statistics = await _purchaseStatisticsService.GetStatisticsByGymIdAndPeriodAsync(ownerId, fromDate, toDate);
+        var statistics = await _purchaseStatisticsService.GetStatisticsByOwnerIdAndPeriodAsync(ownerId, fromDate, toDate);
         return Ok(statistics);   
     }
 }
