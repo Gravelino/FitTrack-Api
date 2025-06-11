@@ -35,6 +35,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IPurchaseStatisticsService, PurchaseStatisticsService>();
         services.AddScoped<IUserStatisticService, UserStatisticService>();
+        services.AddScoped<IGeneralStatisticService, GeneralStatisticService>();
         
         services.AddScoped<MainImageUrlResolver>();
         services.AddScoped<ProductImageResolver>();

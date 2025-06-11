@@ -57,6 +57,18 @@ public class TrainerRepository : ITrainerRepository
         return trainers;
     }
 
+    public async Task<IEnumerable<Trainer>> GetTrainersByOwnerIdAsync(Guid ownerId)
+    {
+        var trainers = await _context.Trainers
+            .Include(t => t.Gym)
+            .Where(t => t.Gym.OwnerId == ownerId)
+            .Include(t => t.User)
+            .Include(t => t.Customers)
+            .ToListAsync();
+        
+        return trainers;
+    }
+
     public async Task<IEnumerable<User>> GetClientsAsync(Guid trainerId)
     {
         var clients = await _context.Users
