@@ -13,4 +13,7 @@ public interface IUserMembershipRepository: IRepository<UserMembership>
     
     Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByGymIdAsync(Guid gymId, DateTime fromDate, DateTime toDate);
     Task<IEnumerable<UserMembership>> GetUserMembershipsHistoryByOwnerIdAndPeriodAsync(Guid ownerId, DateTime fromDate, DateTime toDate);
+    
+    Task<IEnumerable<Guid>> GetUsersIdsWithActiveMembershipsAsyncByGymId(Guid gymId);
+    Task<Dictionary<Guid,IEnumerable<Guid>>> GetUsersIdsWithActiveMembershipsAsyncByOwnerId(Guid ownerId);
 }

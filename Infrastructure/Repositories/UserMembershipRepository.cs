@@ -118,4 +118,26 @@ public class UserMembershipRepository : Repository<UserMembership>, IUserMembers
         
         return memberships;
     }
+
+    public async Task<IEnumerable<Guid>> GetUsersIdsWithActiveMembershipsAsyncByGymId(Guid gymId)
+    {
+        return await _context.UserMemberships.Where(um => 
+                um.Membership.GymId == gymId && um.Status == MembershipStatus.Active)
+            .Select(um => um.UserId)
+            .Distinct()
+            .ToListAsync();
+    }
+
+    public async Task<Dictionary<Guid,IEnumerable<Guid>>> GetUsersIdsWithActiveMembershipsAsyncByOwnerId(Guid ownerId)
+    {
+        return await _context.UserMemberships.Where(um =>
+                um.Membership.Gym.OwnerId == ownerId && um.Status == MembershipStatus.Active)
+            .GroupBy(um => um.Membership.GymId)
+            .Select(g => new
+            {
+                g.Key,
+                Users = g.Select(um => um.UserId).Distinct()
+            })
+            .ToDictionaryAsync(g => g.Key, g => g.Users);;
+    }
 }
