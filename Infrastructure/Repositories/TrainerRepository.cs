@@ -17,6 +17,7 @@ public class TrainerRepository : ITrainerRepository
     {
         return await _context.Trainers
             .Include(t => t.User)
+            .Include(t => t.Customers)
             .FirstOrDefaultAsync(t => t.UserId == id);
     }
 
@@ -50,6 +51,7 @@ public class TrainerRepository : ITrainerRepository
         var trainers = await _context.Trainers
             .Where(t => t.GymId == gymId)
             .Include(t => t.User)
+            .Include(t => t.Customers)
             .ToListAsync();
         
         return trainers;

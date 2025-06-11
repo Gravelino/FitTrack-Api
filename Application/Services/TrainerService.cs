@@ -42,7 +42,8 @@ public class TrainerService: ITrainerService
             Login = t.User.UserName ?? string.Empty,
             PhoneNumber = t.User.PhoneNumber ?? string.Empty,
             ProfileImageUrl = t.User.PictureUrl is not null ? _s3Service.GeneratePreSignedUrl(t.User.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
-        });
+            TotalClients = t.Customers.Count,
+        }).OrderByDescending(t => t.TotalClients);
     }
 
     public async Task<GymStaffReadDto> GetTrainerByIdAsync(Guid id)
@@ -58,6 +59,7 @@ public class TrainerService: ITrainerService
             Login = trainer.User.UserName ?? string.Empty,
             PhoneNumber = trainer.User.PhoneNumber ?? string.Empty,
             ProfileImageUrl = trainer.User.PictureUrl is not null ? _s3Service.GeneratePreSignedUrl(trainer.User.PictureUrl, TimeSpan.FromMinutes(60)) : string.Empty,
+            TotalClients = trainer.Customers.Count,
         };
     }
 
