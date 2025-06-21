@@ -19,7 +19,7 @@ public class GeneralStatisticsController : Controller
     }
 
     [HttpGet("get-by-gymId/{gymId:guid}")]
-    [Authorize(Roles = IdentityRoleConstants.Admin + IdentityRoleConstants.Owner)]
+    [Authorize(Roles = IdentityRoleConstants.Admin + "," + IdentityRoleConstants.Owner)]
     public async Task<ActionResult<GeneralStatisticDto>> GetStatisticsByGymAsync(Guid gymId)
     {
         var statistics = await _generalStatisticService.GetStatisticsByGymIdAndPeriodAsync(gymId);

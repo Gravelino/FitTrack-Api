@@ -21,7 +21,7 @@ public class PurchaseStatisticsController: ControllerBase
     [HttpGet("get-by-gymId/{gymId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [Authorize(Roles = IdentityRoleConstants.Admin + IdentityRoleConstants.Owner)]
+    [Authorize(Roles = IdentityRoleConstants.Admin + "," + IdentityRoleConstants.Owner)]
     public async Task<ActionResult<IEnumerable<PurchaseStatisticsGroupedDto>>> GetStatisticsByGymAsync(Guid gymId,
         [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate, [FromQuery] string purchasesGroupBy)
     {
